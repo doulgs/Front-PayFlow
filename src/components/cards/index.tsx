@@ -8,7 +8,7 @@ type CardSectionProps = {
 };
 
 const CardRoot: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className }) => {
-  return <View className={clsx("flex-1 rounded-xl overflow-hidden shadow p-4", className)}>{children}</View>;
+  return <View className={clsx("flex-1 rounded-xl overflow-hidden p-4", className)}>{children}</View>;
 };
 
 const CardHeader: React.FC<CardSectionProps> = ({ children, className }) => {

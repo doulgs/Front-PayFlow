@@ -25,7 +25,6 @@ export const Avatar: React.FC<AvatarProps> = ({ imageUrl, imageLocal, name, size
   const containerStyle = {
     width: size,
     height: size,
-    borderRadius: size / 2,
   };
 
   const showBorder = !imageSource;
@@ -33,9 +32,9 @@ export const Avatar: React.FC<AvatarProps> = ({ imageUrl, imageLocal, name, size
   return (
     <View
       className={clsx(
-        "items-center justify-center rounded-full overflow-hidden",
-        "bg-light-background-alternative dark:bg-dark-background-primary",
-        showBorder && "border border-purple-500",
+        "items-center justify-center rounded-2xl overflow-hidden",
+        "bg-light-brand-primary/10 dark:bg-light-brand-primary/50",
+        showBorder && "border border-light-brand-primary",
         className
       )}
       style={containerStyle}
