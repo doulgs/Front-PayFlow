@@ -57,7 +57,7 @@ const baseStyles = "flex-row items-center h-12 min-h-[48px]";
 const variants = {
   outline:
     "flex-1 rounded-lg border border-slate-400 bg-light-background-alternative dark:bg-dark-background-alternative px-4",
-  flat: "flex-1 border-b border-slate-400 rounded-none bg-transparent dark:bg-transparent px-4",
+  flat: "flex-1 border-b border-slate-400 rounded-none bg-transparent dark:bg-transparent text-red-500 px-0",
   text: "flex-1 bg-transparent border-0 rounded-none px-0",
 };
 

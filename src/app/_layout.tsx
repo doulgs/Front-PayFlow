@@ -9,6 +9,8 @@ import { StatusBar } from "expo-status-bar";
 import { ActivityIndicator, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
+import { SafeAreaProvider } from "react-native-safe-area-context";
+
 import { LanguageProvider } from "@/contexts/language-context";
 import { ThemeProvider } from "@/contexts/theme-context";
 import { ToastProvider } from "@/contexts/toast-context";
@@ -48,7 +50,7 @@ export default function MainLayout() {
     );
   }
   return (
-    <>
+    <SafeAreaProvider>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <StatusBar style="auto" />
 
@@ -65,6 +67,6 @@ export default function MainLayout() {
           </ThemeProvider>
         </LanguageProvider>
       </GestureHandlerRootView>
-    </>
+    </SafeAreaProvider>
   );
 }

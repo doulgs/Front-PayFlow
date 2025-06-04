@@ -18,9 +18,9 @@ interface ButtonProps extends TouchableOpacityProps {
 }
 
 const variantClasses: Record<Variant, string> = {
-  primary: "bg-light-brand-secondary dark:bg-dark-brand-secondary",
+  primary: "bg-light-brand-primary dark:bg-dark-brand-primary",
   secondary: "bg-light-surface-pressed/20 dark:bg-dark-surface-pressed/20",
-  outline: "border border-light-brand-secondary dark:border-dark-brand-secondary bg-transparent",
+  outline: "border bg-transparent",
   ghost: "bg-transparent",
 };
 
