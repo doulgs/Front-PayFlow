@@ -42,12 +42,10 @@ Este app consome uma API REST desenvolvida em **Java + Spring Boot**, disponíve
 1. Clone este repositório:
    ```bash
    git clone https://github.com/doulgs/Front-Payflow.git
-````
 
 2. Acesse o diretório:
-
    ```bash
-   cd payflow-frontend
+   cd Front-Payflow
    ```
 
 3. Instale as dependências:
@@ -64,7 +62,7 @@ Este app consome uma API REST desenvolvida em **Java + Spring Boot**, disponíve
 
 ## 🔐 Variáveis de ambiente
 
-Crie um arquivo `.env` na raiz com as seguintes variáveis:
+Crie um arquivo `.env` na raiz com a seguinte variável:
 
 ```
 API_BASE_URL=http://localhost:8080
@@ -73,9 +71,3 @@ API_BASE_URL=http://localhost:8080
 ## 📄 Licença
 
 Este projeto está licenciado sob a [MIT License](LICENSE).
-
----
-
-Desenvolvido com 💛 por \[doulgs]
-
-```
