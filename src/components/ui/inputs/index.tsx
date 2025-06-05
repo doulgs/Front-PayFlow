@@ -4,18 +4,18 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { clsx } from "clsx";
 
-import { PasswordInput } from "@/components/inputs/InputsTypes/password";
-import { EmailInput } from "@/components/inputs/InputsTypes/mail";
-import { CPFInput } from "@/components/inputs/InputsTypes/cpf";
-import { CNPJInput } from "@/components/inputs/InputsTypes/cnpj";
-import { NumberInput } from "@/components/inputs/InputsTypes/number";
-import { CurrencyInput } from "@/components/inputs/InputsTypes/currency";
-import { AreaInput } from "@/components/inputs/InputsTypes/area";
-import { DateInput } from "@/components/inputs/InputsTypes/date";
-import { DocumentInput } from "@/components/inputs/InputsTypes/document";
-import { FilePickerInput } from "@/components/inputs/InputsTypes/file-picker";
-import { MultiSelectInput } from "@/components/inputs/InputsTypes/multi-select";
-import { TextInputField } from "@/components/inputs/InputsTypes/text";
+import { PasswordInput } from "@/components/ui/inputs/InputsTypes/password";
+import { EmailInput } from "@/components/ui/inputs/InputsTypes/mail";
+import { CPFInput } from "@/components/ui/inputs/InputsTypes/cpf";
+import { CNPJInput } from "@/components/ui/inputs/InputsTypes/cnpj";
+import { NumberInput } from "@/components/ui/inputs/InputsTypes/number";
+import { CurrencyInput } from "@/components/ui/inputs/InputsTypes/currency";
+import { AreaInput } from "@/components/ui/inputs/InputsTypes/area";
+import { DateInput } from "@/components/ui/inputs/InputsTypes/date";
+import { DocumentInput } from "@/components/ui/inputs/InputsTypes/document";
+import { FilePickerInput } from "@/components/ui/inputs/InputsTypes/file-picker";
+import { MultiSelectInput } from "@/components/ui/inputs/InputsTypes/multi-select";
+import { TextInputField } from "@/components/ui/inputs/InputsTypes/text";
 import { SelectInput } from "./InputsTypes/select";
 
 const inputTypeComponents = {

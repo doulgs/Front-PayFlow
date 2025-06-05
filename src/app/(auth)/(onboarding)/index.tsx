@@ -1,15 +1,14 @@
-import { Button } from "@/components/buttons";
-import { CustomInput } from "@/components/inputs";
+import { Avatar } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/buttons";
+import { CustomInput } from "@/components/ui/inputs";
 import { useTheme } from "@/contexts/theme-context";
 import { useChangeLanguage } from "@/hooks/useChangeLanguage";
-import { LinearGradient } from "expo-linear-gradient";
-import React, { useEffect, useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { Text, View, TouchableOpacity, ActivityIndicator } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { LinearGradient } from "expo-linear-gradient";
 import { Check, CornerUpLeft, Moon, Sun } from "lucide-react-native";
-import { Card } from "@/components/cards";
-import { Avatar } from "@/components/avatar";
+import React, { useEffect, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
 
 const gradientColors = [
   "rgba(255, 148, 26, 1.0)",
@@ -49,7 +48,7 @@ export default function Onboarding() {
     });
   }, []);
 
-  const onSubmit: SubmitHandler<FormData> = async (data) => {
+  const handleCpfSubmit: SubmitHandler<FormData> = async (data) => {
     if (rememberCpf) {
       await AsyncStorage.setItem("savedCpf", data.cpf);
     } else {
@@ -61,6 +60,24 @@ export default function Onboarding() {
       setStep("success");
       setLoading(false);
     }, 1500);
+  };
+
+  const handleLoginSubmit: SubmitHandler<FormData> = async (data) => {
+    setLoading(true);
+    try {
+      // Aqui você faria a chamada à API de login com o CPF já preenchido e a senha atual
+      // const response = await fakeLoginApi({
+      //   cpf: watch("cpf"),
+      //   password: data.password,
+      // });
+
+      console.log("Usuário autenticado:");
+      // Redireciona para o app ou salva o token, etc.
+    } catch (err) {
+      console.error("Erro no login", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleBack = async () => {
@@ -95,7 +112,7 @@ export default function Onboarding() {
       </TouchableOpacity>
 
       <View className="flex-1 items-center justify-center">
-        <Button title="Prosseguir" onPress={handleSubmit(onSubmit)} className="rounded-3xl" />
+        <Button title="Prosseguir" onPress={handleSubmit(handleCpfSubmit)} className="rounded-3xl" />
       </View>
 
       <View className="flex-1 max-h-24 flex-row items-center justify-between gap-8">
@@ -154,7 +171,7 @@ export default function Onboarding() {
       </View>
 
       <View className="flex-1 items-center justify-center">
-        <Button title="Prosseguir" onPress={handleSubmit(onSubmit)} className="rounded-3xl" />
+        <Button title="Prosseguir" onPress={handleSubmit(handleLoginSubmit)} className="rounded-3xl" />
       </View>
 
       <View className="flex-1 max-h-24 flex-row items-center justify-between gap-8">

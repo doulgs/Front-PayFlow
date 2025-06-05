@@ -2,7 +2,7 @@ import { clsx } from "clsx";
 import React, { createContext, useContext, useRef } from "react";
 import { Text, TouchableOpacity } from "react-native";
 
-import { ShowToastProps, TOAST_STYLES, ToastHandle, ToastMessage } from "@/components/toast";
+import { ShowToastProps, TOAST_STYLES, ToastHandle, ToastMessage } from "@/components/ui/toast";
 
 interface ToastContextType {
   showToast: (props: ShowToastProps) => void;

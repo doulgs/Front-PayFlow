@@ -5,24 +5,18 @@ export const useCustomNavigation = () => {
 
   const to = {
     auth: {
-      login: () => router.push("/(auth)/(login)"),
-      register: () => router.push("/(auth)/(register)"),
-      confirmPhone: () => router.push("/(auth)/(confirm-phone)"),
-      changePhone: () => router.push("/(auth)/(change-phone)"),
+      login: () => router.push("/(auth)/(onboarding)"),
     },
 
     app: {
-      agents: {
-        home: () => router.push("/(app)/(agents)"),
+      dashboard: {
+        home: () => router.push("/(app)/(dashboard)"),
       },
-      contacts: {
-        home: () => router.push("/(app)/(contacts)"),
-      },
-      conversations: {
-        home: () => router.push("/(app)/(conversations)"),
+      laucher: {
+        home: () => router.push("/(app)/(laucher)"),
       },
       settings: {
-        home: () => router.push("/(app)/(settings)"),
+        home: () => router.push("/(app)/(setting)"),
       },
     },
   };
