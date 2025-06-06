@@ -19,5 +19,14 @@
   "onboarding.success.button": "Prosseguir",
   "tabs.dashboard": "Painel",
   "tabs.new": "Novo",
-  "tabs.overview": "Visão Geral"
+  "tabs.overview": "Visão Geral",
+  "stack.launcher.title": "Lançamento",
+  "stack.launcher.subtitle": "Realizar lançamento",
+  "stack.notification.title": "Notificações",
+  "stack.notification.subtitle": "Acompanhe suas notificações",
+  "stack.profile.title": "Perfil",
+  "stack.profile.subtitle": "Detalhes do perfil do usuário",
+  "common.greeting.morning": "Bom dia",
+  "common.greeting.afternoon": "Boa tarde",
+  "common.greeting.night": "Boa noite"
 }

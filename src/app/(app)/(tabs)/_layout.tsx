@@ -1,12 +1,12 @@
 import { Header } from "@/components/header";
 import { CustomTabBar } from "@/components/tab";
+import { useChangeLanguage } from "@/hooks/useChangeLanguage";
 import { Tabs } from "expo-router";
 import { Bell, HelpCircle } from "lucide-react-native";
 import React from "react";
-import { useTranslation } from "react-i18next";
 
 export default function TabLayout() {
-  const { t } = useTranslation();
+  const { t } = useChangeLanguage();
 
   return (
     <Tabs tabBar={(props) => <CustomTabBar {...props} />} screenOptions={{ headerShown: true }}>

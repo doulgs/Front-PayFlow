@@ -3,8 +3,10 @@ import { clsx } from "clsx";
 import { Ionicons } from "@expo/vector-icons";
 import { Image, StatusBar, Text, TouchableOpacity, View, ViewStyle } from "react-native";
 import { useTheme } from "@/hooks/useTheme";
-import { takeGreeting } from "@/utils/takeGreeting";
+
 import GradientLinear from "../ui/overlays/gradient-linear";
+import { useGreeting } from "@/hooks/useGreeting";
+import { useChangeLanguage } from "@/hooks/useChangeLanguage";
 
 interface ActionsProps {
   className?: string;
@@ -51,6 +53,8 @@ export const Header: React.FC<HeaderProps> = ({
   transparentBackground = false,
   gradientBackground = true,
 }) => {
+  const { t } = useChangeLanguage();
+  const { greeting } = useGreeting();
   const { currentTheme } = useTheme();
   const title = options.title || route.name;
 
@@ -81,7 +85,7 @@ export const Header: React.FC<HeaderProps> = ({
 
         <View>
           <Text className={clsx("text-xl font-bold", textColorClass)}>
-            {title === "Dashboard" ? takeGreeting() : title}
+            {title === t("tabs.dashboard") ? greeting : title}
           </Text>
 
           {subTitle && <Text className={clsx("text-sm italic", textColorClass)}>{subTitle}</Text>}

@@ -4,7 +4,7 @@ import { clsx } from "clsx";
 import { DiamondPlus, PanelsTopLeft, SquareMenu } from "lucide-react-native";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import { useTranslation } from "react-i18next";
+import { useChangeLanguage } from "@/hooks/useChangeLanguage";
 
 const tabs = [
   {
@@ -25,7 +25,7 @@ const tabs = [
 ];
 
 const CustomTabBar = ({ state, navigation }: BottomTabBarProps) => {
-  const { t } = useTranslation();
+  const { t } = useChangeLanguage();
   const { to } = useCustomNavigation();
 
   return (

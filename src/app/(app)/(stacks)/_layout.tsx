@@ -1,29 +1,32 @@
 import React from "react";
 import { Stack } from "expo-router";
 import { Header } from "@/components/header";
+import { useChangeLanguage } from "@/hooks/useChangeLanguage";
 
 export default function StackLayout() {
+  const { t } = useChangeLanguage();
+
   return (
     <Stack>
       <Stack.Screen
         name="(launcher)/index"
         options={{
-          title: "Lançamento",
-          header: (props) => <Header subTitle="Realizar lançamento" {...props} />,
+          title: t("stack.launcher.title"),
+          header: (props) => <Header subTitle={t("stack.launcher.subtitle")} {...props} />,
         }}
       />
       <Stack.Screen
         name="(notification)/index"
         options={{
-          title: "Notificações",
-          header: (props) => <Header subTitle="Acompanhe suas notificações" {...props} />,
+          title: t("stack.notification.title"),
+          header: (props) => <Header subTitle={t("stack.notification.subtitle")} {...props} />,
         }}
       />
       <Stack.Screen
         name="(profile)/index"
         options={{
-          title: "Perfil",
-          header: (props) => <Header subTitle="Detalhes do perfil do usuário" {...props} />,
+          title: t("stack.profile.title"),
+          header: (props) => <Header subTitle={t("stack.profile.subtitle")} {...props} />,
         }}
       />
     </Stack>

@@ -9,7 +9,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Check, CornerUpLeft, Moon, Sun } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
 import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
 
 const gradientColors = [
@@ -35,7 +34,7 @@ export default function Onboarding() {
   } = useForm<FormData>();
   const { toggleTheme, theme } = useTheme();
   const { currentLanguage, changeLanguage } = useChangeLanguage();
-  const { t } = useTranslation();
+  const { t } = useChangeLanguage();
   const { to } = useCustomNavigation();
 
   const [rememberCpf, setRememberCpf] = useState(false);

@@ -19,5 +19,14 @@
   "onboarding.success.button": "Continue",
   "tabs.dashboard": "Dashboard",
   "tabs.new": "New",
-  "tabs.overview": "Overview"
+  "tabs.overview": "Overview",
+  "stack.launcher.title": "Launcher",
+  "stack.launcher.subtitle": "Create new entry",
+  "stack.notification.title": "Notifications",
+  "stack.notification.subtitle": "Follow your notifications",
+  "stack.profile.title": "Profile",
+  "stack.profile.subtitle": "User profile details",
+  "common.greeting.morning": "Good morning",
+  "common.greeting.afternoon": "Good afternoon",
+  "common.greeting.night": "Good evening"
 }
