@@ -9,14 +9,27 @@ export const useCustomNavigation = () => {
     },
 
     app: {
-      dashboard: {
-        home: () => router.push("/(app)/(dashboard)"),
+      tabs: {
+        dashboard: {
+          home: () => router.push("/(app)/(tabs)/(dashboard)"),
+        },
+        new: {
+          home: () => router.push("/(app)/(tabs)/(new)"),
+        },
+        overview: {
+          home: () => router.push("/(app)/(tabs)/(overview)"),
+        },
       },
-      laucher: {
-        home: () => router.push("/(app)/(laucher)"),
-      },
-      settings: {
-        home: () => router.push("/(app)/(setting)"),
+      stacks: {
+        launcher: {
+          home: () => router.push("/(app)/(stacks)/(launcher)"),
+        },
+        notification: {
+          home: () => router.push("/(app)/(stacks)/(notification)"),
+        },
+        profile: {
+          home: () => router.push("/(app)/(stacks)/(profile)"),
+        },
       },
     },
   };

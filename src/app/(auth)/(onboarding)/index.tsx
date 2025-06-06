@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/buttons";
 import { CustomInput } from "@/components/ui/inputs";
 import { useTheme } from "@/contexts/theme-context";
 import { useChangeLanguage } from "@/hooks/useChangeLanguage";
+import { useCustomNavigation } from "@/hooks/useCustomNavigation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
 import { Check, CornerUpLeft, Moon, Sun } from "lucide-react-native";
@@ -31,13 +32,13 @@ export default function Onboarding() {
     reset,
     formState: { errors },
   } = useForm<FormData>();
+  const { toggleTheme, theme } = useTheme();
+  const { currentLanguage, changeLanguage } = useChangeLanguage();
+  const { to } = useCustomNavigation();
 
   const [rememberCpf, setRememberCpf] = useState(false);
   const [step, setStep] = useState<"cpf" | "success">("cpf");
   const [loading, setLoading] = useState(false);
-
-  const { toggleTheme, theme } = useTheme();
-  const { currentLanguage, changeLanguage } = useChangeLanguage();
 
   useEffect(() => {
     AsyncStorage.getItem("savedCpf").then((cpf) => {
@@ -71,7 +72,8 @@ export default function Onboarding() {
       //   password: data.password,
       // });
 
-      console.log("Usuário autenticado:");
+      to.app.tabs.dashboard.home(); // Redireciona para o dashboard após o login bem-sucedido
+      console.log("Login bem-sucedido com CPF:", data.cpf, "e senha:", data.password);
       // Redireciona para o app ou salva o token, etc.
     } catch (err) {
       console.error("Erro no login", err);

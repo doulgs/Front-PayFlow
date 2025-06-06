@@ -1,7 +1,8 @@
 import { useChangeLanguage } from "@/hooks/useChangeLanguage";
+import { useCustomNavigation } from "@/hooks/useCustomNavigation";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { clsx } from "clsx";
-import { BookMarked, Bot, LayoutDashboard, MessagesSquare, Settings } from "lucide-react-native";
+import { DiamondPlus, PanelsTopLeft, SquareMenu } from "lucide-react-native";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
@@ -9,22 +10,23 @@ const tabs = [
   {
     route: "(dashboard)/index",
     translationKey: "dashboard",
-    icon: (color: string, size: number) => <LayoutDashboard color={color} size={size} />,
+    icon: (color: string, size: number) => <PanelsTopLeft color={color} size={size} />,
   },
   {
-    route: "(laucher)/index",
-    translationKey: "laucher",
-    icon: (color: string, size: number) => <MessagesSquare color={color} size={size} />,
+    route: "(new)/index",
+    translationKey: "new",
+    icon: (color: string, size: number) => <DiamondPlus color={color} size={size} />,
   },
   {
-    route: "(settings)/index",
-    translationKey: "settings",
-    icon: (color: string, size: number) => <BookMarked color={color} size={size} />,
+    route: "(overview)/index",
+    translationKey: "overview",
+    icon: (color: string, size: number) => <SquareMenu color={color} size={size} />,
   },
 ];
 
 const CustomTabBar = ({ state, navigation }: BottomTabBarProps) => {
   const { t } = useChangeLanguage();
+  const { to } = useCustomNavigation();
 
   return (
     <View className="flex-row bg-light-background-primary dark:bg-dark-background-primary border-t border-slate-300 dark:border-slate-600 py-4 px-2 justify-around">
@@ -32,7 +34,7 @@ const CustomTabBar = ({ state, navigation }: BottomTabBarProps) => {
         const tabInfo = tabs.find((tab) => route.name.includes(tab.route));
         const isFocused = state.index === index;
 
-        const color = isFocused ? "#6B02ED" : "#a0a0a0";
+        const color = isFocused ? "#ff941a" : "#a0a0a0";
         const size = 24;
 
         const onPress = () => {
@@ -42,8 +44,13 @@ const CustomTabBar = ({ state, navigation }: BottomTabBarProps) => {
             canPreventDefault: true,
           });
 
-          if (!isFocused && !event.defaultPrevented) {
-            navigation.navigate(route.name);
+          if (!event.defaultPrevented) {
+            if (route.name.includes("(new)/index")) {
+              // Redireciona para outra stack manualmente
+              to.app.stacks.launcher.home();
+            } else if (!isFocused) {
+              navigation.navigate(route.name);
+            }
           }
         };
 

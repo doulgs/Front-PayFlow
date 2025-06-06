@@ -11,7 +11,7 @@ interface Props {
 
 export default function GradientLinear({ className, style, children }: Props) {
   return (
-    <LinearGradient colors={["#291449", "#33115F", "#3D1071"]} className={clsx("", className)} style={style}>
+    <LinearGradient colors={["#ff941ad1", "#ff941a"]} className={clsx("", className)} style={style}>
       {children}
     </LinearGradient>
   );
