@@ -3,14 +3,17 @@ import { CustomTabBar } from "@/components/tab";
 import { Tabs } from "expo-router";
 import { Bell, HelpCircle } from "lucide-react-native";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 export default function TabLayout() {
+  const { t } = useTranslation();
+
   return (
     <Tabs tabBar={(props) => <CustomTabBar {...props} />} screenOptions={{ headerShown: true }}>
       <Tabs.Screen
         name="(dashboard)/index"
         options={{
-          title: "Dashboard",
+          title: t("tabs.dashboard"),
           header: (props) => (
             <Header
               subTitle={"Douglas Domiciano"}
@@ -35,14 +38,14 @@ export default function TabLayout() {
       <Tabs.Screen
         name="(new)/index"
         options={{
-          title: "Laucher",
+          title: t("tabs.new"),
           header: (props) => <Header hideBackButton {...props} />,
         }}
       />
       <Tabs.Screen
         name="(overview)/index"
         options={{
-          title: "Overview",
+          title: t("tabs.overview"),
           header: (props) => <Header hideBackButton {...props} />,
         }}
       />

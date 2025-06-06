@@ -1,31 +1,31 @@
-import { useChangeLanguage } from "@/hooks/useChangeLanguage";
 import { useCustomNavigation } from "@/hooks/useCustomNavigation";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { clsx } from "clsx";
 import { DiamondPlus, PanelsTopLeft, SquareMenu } from "lucide-react-native";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
+import { useTranslation } from "react-i18next";
 
 const tabs = [
   {
     route: "(dashboard)/index",
-    translationKey: "dashboard",
+    translationKey: "tabs.dashboard",
     icon: (color: string, size: number) => <PanelsTopLeft color={color} size={size} />,
   },
   {
     route: "(new)/index",
-    translationKey: "new",
+    translationKey: "tabs.new",
     icon: (color: string, size: number) => <DiamondPlus color={color} size={size} />,
   },
   {
     route: "(overview)/index",
-    translationKey: "overview",
+    translationKey: "tabs.overview",
     icon: (color: string, size: number) => <SquareMenu color={color} size={size} />,
   },
 ];
 
 const CustomTabBar = ({ state, navigation }: BottomTabBarProps) => {
-  const { t } = useChangeLanguage();
+  const { t } = useTranslation();
   const { to } = useCustomNavigation();
 
   return (
@@ -46,7 +46,6 @@ const CustomTabBar = ({ state, navigation }: BottomTabBarProps) => {
 
           if (!event.defaultPrevented) {
             if (route.name.includes("(new)/index")) {
-              // Redireciona para outra stack manualmente
               to.app.stacks.launcher.home();
             } else if (!isFocused) {
               navigation.navigate(route.name);
@@ -69,7 +68,7 @@ const CustomTabBar = ({ state, navigation }: BottomTabBarProps) => {
                 isFocused ? "text-light-brand-primary font-semibold" : "text-gray-400"
               )}
             >
-              {tabInfo ? t(tabInfo.translationKey) : route.name}
+              {tabInfo ? t(tabInfo.translationKey as any) : route.name}
             </Text>
           </TouchableOpacity>
         );

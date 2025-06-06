@@ -16,5 +16,8 @@
   "onboarding.success.passwordTitle": "Enter your password.",
   "onboarding.success.passwordLabel": "Password",
   "onboarding.success.passwordPlaceholder": "Enter your password here",
-  "onboarding.success.button": "Continue"
+  "onboarding.success.button": "Continue",
+  "tabs.dashboard": "Dashboard",
+  "tabs.new": "New",
+  "tabs.overview": "Overview"
 }

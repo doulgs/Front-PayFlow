@@ -16,5 +16,8 @@
   "onboarding.success.passwordTitle": "Informe sua senha.",
   "onboarding.success.passwordLabel": "Senha",
   "onboarding.success.passwordPlaceholder": "Digite aqui sua senha",
-  "onboarding.success.button": "Prosseguir"
+  "onboarding.success.button": "Prosseguir",
+  "tabs.dashboard": "Painel",
+  "tabs.new": "Novo",
+  "tabs.overview": "Visão Geral"
 }
