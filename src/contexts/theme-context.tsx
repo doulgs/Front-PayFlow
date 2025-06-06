@@ -17,7 +17,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
     setColorScheme(newTheme);
-    console.log(`🔄 Tema atualizado para: ${newTheme}`);
+    // console.log(`🔄 Tema atualizado para: ${newTheme}`);
   };
 
   return <ThemeContext.Provider value={{ theme, toggleTheme }}>{children}</ThemeContext.Provider>;

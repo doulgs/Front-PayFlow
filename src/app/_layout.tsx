@@ -52,7 +52,7 @@ export default function MainLayout() {
   return (
     <SafeAreaProvider>
       <GestureHandlerRootView style={{ flex: 1 }}>
-        <StatusBar style="auto" />
+        <StatusBar style="light" />
 
         <LanguageProvider>
           <ThemeProvider>
