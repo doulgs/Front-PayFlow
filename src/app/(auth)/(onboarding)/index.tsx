@@ -1,23 +1,16 @@
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/buttons";
 import { CustomInput } from "@/components/ui/inputs";
-import { useTheme } from "@/contexts/theme-context";
+import { useTheme as useThemeContext } from "@/contexts/theme-context";
 import { useChangeLanguage } from "@/hooks/useChangeLanguage";
 import { useCustomNavigation } from "@/hooks/useCustomNavigation";
+import { useTheme } from "@/hooks/useTheme";
+import { colors } from "@/styles/colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { LinearGradient } from "expo-linear-gradient";
 import { Check, CornerUpLeft, Moon, Sun } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
-
-const gradientColors = [
-  "rgba(255, 148, 26, 1.0)",
-  "rgba(255, 148, 26, 1.0)",
-  "rgba(255, 195, 128, 1.0)",
-  "rgba(255, 196, 128, 0.46)",
-  "transparent",
-] as const;
 
 type FormData = {
   cpf: string;
@@ -32,7 +25,8 @@ export default function Onboarding() {
     reset,
     formState: { errors },
   } = useForm<FormData>();
-  const { toggleTheme, theme } = useTheme();
+  const { currentTheme } = useTheme();
+  const { toggleTheme, theme } = useThemeContext();
   const { currentLanguage, changeLanguage } = useChangeLanguage();
   const { t } = useChangeLanguage();
   const { to } = useCustomNavigation();
@@ -83,7 +77,7 @@ export default function Onboarding() {
   };
 
   const renderCpfStep = () => (
-    <View className="flex-1 bg-light-background-primary dark:bg-dark-background-primary rounded-t-2xl p-8">
+    <View className="flex-1 bg-light-background-secondary dark:bg-dark-background-alternative rounded-t-2xl p-8">
       <Text className="font-bold text-2xl text-black dark:text-white">{t("onboarding.cpf.title")}</Text>
 
       <View className="mt-8">
@@ -137,10 +131,10 @@ export default function Onboarding() {
   );
 
   const renderSuccessStep = () => (
-    <View className="flex-1 bg-light-background-primary dark:bg-dark-background-primary rounded-t-2xl p-8">
+    <View className="flex-1 bg-light-background-secondary dark:bg-dark-background-alternative rounded-t-2xl p-8">
       <View className="flex-row items-center gap-4 mb-8">
         <Avatar size={75} name="Douglas Souza" />
-        <View className="flex-1">
+        <View className="flex-1 bg-light-background-secondary dark:bg-dark-background-alternative">
           <Text className="text-xl font-extrabold text-gray-800 dark:text-white">
             {t("onboarding.success.greeting")}
           </Text>
@@ -150,7 +144,10 @@ export default function Onboarding() {
           <Text className="text-lg text-gray-600 dark:text-gray-400">{t("onboarding.success.cpfMasked")}</Text>
         </View>
         <TouchableOpacity onPress={handleBack} className="p-2">
-          <CornerUpLeft size={32} />
+          <CornerUpLeft
+            size={32}
+            color={currentTheme === "dark" ? colors.light.typography.inverse : colors.dark.typography.inverse}
+          />
         </TouchableOpacity>
       </View>
 
@@ -204,7 +201,7 @@ export default function Onboarding() {
   );
 
   return (
-    <LinearGradient className="flex-1" colors={gradientColors}>
+    <View className="flex-1 bg-light-brand-primary dark:bg-dark-brand-primary">
       <View className="items-center justify-center mt-20 gap-2 py-2">
         <Text className="font-bold text-white text-4xl">{t("onboarding.header.title")}</Text>
         <Text className="font-medium text-white">{t("onboarding.header.version")}</Text>
@@ -212,13 +209,13 @@ export default function Onboarding() {
 
       {loading ? (
         <View className="flex-1 items-center justify-center bg-light-background-primary dark:bg-dark-background-primary rounded-t-2xl p-8">
-          <ActivityIndicator size="large" color="#000" />
+          <ActivityIndicator size="large" color={colors.light.brand.primary} />
         </View>
       ) : step === "cpf" ? (
         renderCpfStep()
       ) : (
         renderSuccessStep()
       )}
-    </LinearGradient>
+    </View>
   );
 }

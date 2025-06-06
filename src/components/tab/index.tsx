@@ -1,10 +1,12 @@
+import { useChangeLanguage } from "@/hooks/useChangeLanguage";
 import { useCustomNavigation } from "@/hooks/useCustomNavigation";
+import { useTheme } from "@/hooks/useTheme";
+import { colors } from "@/styles/colors";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { clsx } from "clsx";
 import { DiamondPlus, PanelsTopLeft, SquareMenu } from "lucide-react-native";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import { useChangeLanguage } from "@/hooks/useChangeLanguage";
 
 const tabs = [
   {
@@ -26,6 +28,7 @@ const tabs = [
 
 const CustomTabBar = ({ state, navigation }: BottomTabBarProps) => {
   const { t } = useChangeLanguage();
+  const { currentTheme } = useTheme();
   const { to } = useCustomNavigation();
 
   return (
@@ -34,8 +37,15 @@ const CustomTabBar = ({ state, navigation }: BottomTabBarProps) => {
         const tabInfo = tabs.find((tab) => route.name.includes(tab.route));
         const isFocused = state.index === index;
 
-        const color = isFocused ? "#ff941a" : "#a0a0a0";
         const size = 24;
+        const color =
+          currentTheme === "dark"
+            ? isFocused
+              ? colors.dark.brand.primary
+              : colors.dark.typography.muted
+            : isFocused
+            ? colors.light.brand.primary
+            : colors.light.typography.muted;
 
         const onPress = () => {
           const event = navigation.emit({

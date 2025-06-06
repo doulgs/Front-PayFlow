@@ -1,4 +1,3 @@
-// src/contexts/LanguageContext.tsx
 import React, { createContext, useContext, ReactNode, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import AsyncStorage from "@react-native-async-storage/async-storage";

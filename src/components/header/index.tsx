@@ -66,7 +66,8 @@ export const Header: React.FC<HeaderProps> = ({
     paddingTop: STATUS_BAR_HEIGHT,
   };
 
-  const textColorClass = currentTheme === "dark" ? "text-dark-typography-inverse" : "text-light-typography-inverse";
+  const textColorClass = "text-light-typography-inverse";
+  // const textColorClass = currentTheme === "dark" ? "text-dark-typography-inverse" : "text-light-typography-inverse";F
 
   const iconColor = currentTheme === "dark" ? "#000000" : "#FFFFFF";
 

@@ -1,8 +1,8 @@
 export const colors = {
   light: {
     brand: {
-      primary: "#ff941a",
-      secondary: "#FFC380",
+      primary: "#02b67a",
+      secondary: "#02b67ad1",
     },
     background: {
       primary: "#ffffff",
@@ -14,7 +14,7 @@ export const colors = {
       secondary: "#706e7a",
       muted: "#b1b0b8",
       inverse: "#FFFFFF",
-      brand: "#ff941a",
+      brand: "#02b67a",
       danger: "#e83f5b",
     },
     status: {
@@ -26,8 +26,8 @@ export const colors = {
   },
   dark: {
     brand: {
-      primary: "#ff941a",
-      secondary: "#FFC380",
+      primary: "#009c68",
+      secondary: "#009c68d1",
     },
     background: {
       primary: "#1A1C29",
@@ -39,7 +39,7 @@ export const colors = {
       secondary: "#D4D4D8",
       muted: "#A1A1AA",
       inverse: "#000000",
-      brand: "#ff941a",
+      brand: "#009c68",
       danger: "#FCA5A5",
     },
     status: {
