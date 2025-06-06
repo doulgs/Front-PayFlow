@@ -9,6 +9,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Check, CornerUpLeft, Moon, Sun } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
 
 const gradientColors = [
@@ -34,6 +35,7 @@ export default function Onboarding() {
   } = useForm<FormData>();
   const { toggleTheme, theme } = useTheme();
   const { currentLanguage, changeLanguage } = useChangeLanguage();
+  const { t } = useTranslation();
   const { to } = useCustomNavigation();
 
   const [rememberCpf, setRememberCpf] = useState(false);
@@ -66,15 +68,8 @@ export default function Onboarding() {
   const handleLoginSubmit: SubmitHandler<FormData> = async (data) => {
     setLoading(true);
     try {
-      // Aqui você faria a chamada à API de login com o CPF já preenchido e a senha atual
-      // const response = await fakeLoginApi({
-      //   cpf: watch("cpf"),
-      //   password: data.password,
-      // });
-
-      to.app.tabs.dashboard.home(); // Redireciona para o dashboard após o login bem-sucedido
+      to.app.tabs.dashboard.home();
       console.log("Login bem-sucedido com CPF:", data.cpf, "e senha:", data.password);
-      // Redireciona para o app ou salva o token, etc.
     } catch (err) {
       console.error("Erro no login", err);
     } finally {
@@ -90,18 +85,16 @@ export default function Onboarding() {
 
   const renderCpfStep = () => (
     <View className="flex-1 bg-light-background-primary dark:bg-dark-background-primary rounded-t-2xl p-8">
-      <Text className="font-bold text-2xl text-black dark:text-white">
-        Se você já é nosso cliente, digite abaixo seu CPF.
-      </Text>
+      <Text className="font-bold text-2xl text-black dark:text-white">{t("onboarding.cpf.title")}</Text>
 
       <View className="mt-8">
         <CustomInput
           name="cpf"
-          label="CPF"
+          label={t("onboarding.cpf.label")}
           control={control}
           type="cpf"
           variant="flat"
-          placeholder="Digite aqui seu CPF"
+          placeholder={t("onboarding.cpf.placeholder")}
           error={errors.cpf?.message}
         />
       </View>
@@ -110,16 +103,16 @@ export default function Onboarding() {
         <View className="w-5 h-5 rounded border border-gray-400 items-center justify-center">
           {rememberCpf && <Check size={16} color="#000" />}
         </View>
-        <Text className="text-sm text-gray-700 dark:text-gray-300">Lembrar CPF</Text>
+        <Text className="text-sm text-gray-700 dark:text-gray-300">{t("onboarding.cpf.remember")}</Text>
       </TouchableOpacity>
 
       <View className="flex-1 items-center justify-center">
-        <Button title="Prosseguir" onPress={handleSubmit(handleCpfSubmit)} className="rounded-3xl" />
+        <Button title={t("onboarding.cpf.button")} onPress={handleSubmit(handleCpfSubmit)} className="rounded-3xl" />
       </View>
 
       <View className="flex-1 max-h-24 flex-row items-center justify-between gap-8">
         <Button
-          title={theme === "dark" ? "Dark" : "Light"}
+          title={theme === "dark" ? t("onboarding.cpf.themeToggle.dark") : t("onboarding.cpf.themeToggle.light")}
           variant="ghost"
           onPress={toggleTheme}
           className="flex-1 bg-light-brand-primary/30 dark:bg-dark-brand-primary/50 rounded-3xl"
@@ -132,7 +125,9 @@ export default function Onboarding() {
           }
         />
         <Button
-          title={currentLanguage === "pt" ? "Portugues" : "Ingles"}
+          title={
+            currentLanguage === "pt" ? t("onboarding.cpf.languageToggle.pt") : t("onboarding.cpf.languageToggle.en")
+          }
           variant="ghost"
           onPress={() => changeLanguage(currentLanguage === "pt" ? "en" : "pt")}
           className="flex-1 bg-light-brand-primary/30 dark:bg-dark-brand-primary/50 rounded-3xl"
@@ -147,38 +142,44 @@ export default function Onboarding() {
       <View className="flex-row items-center gap-4 mb-8">
         <Avatar size={75} name="Douglas Souza" />
         <View className="flex-1">
-          <Text className="text-xl font-extrabold text-gray-800 dark:text-white">Olá,</Text>
-          <Text numberOfLines={1} className="text-2xl font-bold dark:text-white">
-            Douglas de Souza Domiciano
+          <Text className="text-xl font-extrabold text-gray-800 dark:text-white">
+            {t("onboarding.success.greeting")}
           </Text>
-          <Text className="text-lg text-gray-600 dark:text-gray-400">116.***.***-35</Text>
+          <Text numberOfLines={1} className="text-2xl font-bold dark:text-white">
+            {t("onboarding.success.name")}
+          </Text>
+          <Text className="text-lg text-gray-600 dark:text-gray-400">{t("onboarding.success.cpfMasked")}</Text>
         </View>
         <TouchableOpacity onPress={handleBack} className="p-2">
           <CornerUpLeft size={32} />
         </TouchableOpacity>
       </View>
 
-      <Text className="font-bold text-xl text-black dark:text-white">Informe sua senha.</Text>
+      <Text className="font-bold text-xl text-black dark:text-white">{t("onboarding.success.passwordTitle")}</Text>
 
       <View className="mt-8">
         <CustomInput
           name="password"
-          label="Senha"
+          label={t("onboarding.success.passwordLabel")}
           control={control}
           type="password"
           variant="flat"
-          placeholder="Digite aqui sua senha"
+          placeholder={t("onboarding.success.passwordPlaceholder")}
           error={errors.password?.message}
         />
       </View>
 
       <View className="flex-1 items-center justify-center">
-        <Button title="Prosseguir" onPress={handleSubmit(handleLoginSubmit)} className="rounded-3xl" />
+        <Button
+          title={t("onboarding.success.button")}
+          onPress={handleSubmit(handleLoginSubmit)}
+          className="rounded-3xl"
+        />
       </View>
 
       <View className="flex-1 max-h-24 flex-row items-center justify-between gap-8">
         <Button
-          title={theme === "dark" ? "Dark" : "Light"}
+          title={theme === "dark" ? t("onboarding.cpf.themeToggle.dark") : t("onboarding.cpf.themeToggle.light")}
           variant="ghost"
           onPress={toggleTheme}
           className="flex-1 bg-light-brand-primary/30 dark:bg-dark-brand-primary/50 rounded-3xl"
@@ -191,7 +192,9 @@ export default function Onboarding() {
           }
         />
         <Button
-          title={currentLanguage === "pt" ? "Portugues" : "Ingles"}
+          title={
+            currentLanguage === "pt" ? t("onboarding.cpf.languageToggle.pt") : t("onboarding.cpf.languageToggle.en")
+          }
           variant="ghost"
           onPress={() => changeLanguage(currentLanguage === "pt" ? "en" : "pt")}
           className="flex-1 bg-light-brand-primary/30 dark:bg-dark-brand-primary/50 rounded-3xl"
@@ -204,8 +207,8 @@ export default function Onboarding() {
   return (
     <LinearGradient className="flex-1" colors={gradientColors}>
       <View className="items-center justify-center mt-20 gap-2 py-2">
-        <Text className="font-bold text-white text-4xl">PayFlow</Text>
-        <Text className="font-medium text-white">version: 0.0.1</Text>
+        <Text className="font-bold text-white text-4xl">{t("onboarding.header.title")}</Text>
+        <Text className="font-medium text-white">{t("onboarding.header.version")}</Text>
       </View>
 
       {loading ? (

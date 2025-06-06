@@ -1,1 +1,20 @@
-{}
+{
+  "onboarding.header.title": "PayFlow",
+  "onboarding.header.version": "version: 0.0.1",
+  "onboarding.cpf.title": "If you are already our customer, enter your CPF below.",
+  "onboarding.cpf.label": "CPF",
+  "onboarding.cpf.placeholder": "Enter your CPF here",
+  "onboarding.cpf.remember": "Remember CPF",
+  "onboarding.cpf.button": "Continue",
+  "onboarding.cpf.themeToggle.dark": "Dark",
+  "onboarding.cpf.themeToggle.light": "Light",
+  "onboarding.cpf.languageToggle.pt": "Portuguese",
+  "onboarding.cpf.languageToggle.en": "English",
+  "onboarding.success.greeting": "Hello,",
+  "onboarding.success.name": "Douglas de Souza Domiciano",
+  "onboarding.success.cpfMasked": "116.***.***-35",
+  "onboarding.success.passwordTitle": "Enter your password.",
+  "onboarding.success.passwordLabel": "Password",
+  "onboarding.success.passwordPlaceholder": "Enter your password here",
+  "onboarding.success.button": "Continue"
+}
