@@ -20,7 +20,7 @@ import { useFormattedDate } from "@/hooks/useFormattedDate";
 
 interface Props {
   date: Date;
-  data: LatestTransactionsProps;
+  data: LatestTransactionsProps[];
 }
 
 const FinancialTransactionCards: React.FC<Props> = ({ data, date }) => {
@@ -52,7 +52,7 @@ const FinancialTransactionCards: React.FC<Props> = ({ data, date }) => {
   return (
     <>
       <View className="flex-row items-center justify-between px-1 pb-1">
-        <Card.Text className="text-sm">{formatDate(date.toISOString())}</Card.Text>
+        <Card.Text className="text-sm">{formatDate(date.toISOString(), "month-year")}</Card.Text>
         <View className="flex-row items-center justify-center">
           <Card.Text className="text-sm" onPress={handleToggleDetails}>
             Exibir mais
@@ -73,7 +73,7 @@ const FinancialTransactionCards: React.FC<Props> = ({ data, date }) => {
                 Saldo Disponível
               </Card.Text>
               <Card.Text className="font-bold text-xl">
-                {isVisible ? "*******" : formatCurrency(data.incoming - data.expenses)}
+                {isVisible ? "*******" : formatCurrency(data[0].value - data[1].value)}
               </Card.Text>
             </View>
 
@@ -98,7 +98,7 @@ const FinancialTransactionCards: React.FC<Props> = ({ data, date }) => {
                 Entradas
               </Card.Text>
               <Card.Text className="font-bold text-xl">
-                {isVisible ? "*******" : formatCurrency(data.incoming)}
+                {isVisible ? "*******" : formatCurrency(data[0].value)}
               </Card.Text>
             </View>
           </Card.Body>
@@ -114,7 +114,7 @@ const FinancialTransactionCards: React.FC<Props> = ({ data, date }) => {
                 Saídas
               </Card.Text>
               <Card.Text className="font-bold text-xl">
-                {isVisible ? "*******" : formatCurrency(data.expenses)}
+                {isVisible ? "*******" : formatCurrency(data[1].value)}
               </Card.Text>
             </View>
           </Card.Body>
@@ -134,7 +134,7 @@ const FinancialTransactionCards: React.FC<Props> = ({ data, date }) => {
                   A Receber
                 </Card.Text>
                 <Card.Text className="font-bold text-xl">
-                  {isVisible ? "*******" : formatCurrency(data.receivables)}
+                  {isVisible ? "*******" : formatCurrency(data[2].value)}
                 </Card.Text>
               </View>
             </Card.Body>
@@ -150,7 +150,7 @@ const FinancialTransactionCards: React.FC<Props> = ({ data, date }) => {
                   A Pagar
                 </Card.Text>
                 <Card.Text className="font-bold text-xl">
-                  {isVisible ? "*******" : formatCurrency(data.payables)}
+                  {isVisible ? "*******" : formatCurrency(data[3].value)}
                 </Card.Text>
               </View>
             </Card.Body>

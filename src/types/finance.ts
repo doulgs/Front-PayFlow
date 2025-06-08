@@ -40,8 +40,8 @@ export interface FinanceTransaction {
 }
 
 export interface LatestTransactionsProps {
-  incoming: number;
-  expenses: number;
-  receivables: number;
-  payables: number;
+  key: string;
+  label: string;
+  value: number;
+  color: string;
 }
