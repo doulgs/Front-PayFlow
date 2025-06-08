@@ -23,7 +23,7 @@ interface Props {
   data: LatestTransactionProps[];
 }
 
-const FinancialTransactionCards: React.FC<Props> = ({ data, date }) => {
+const FinancialTransaction: React.FC<Props> = ({ data, date }) => {
   const { currentTheme } = useTheme();
   const { formatCurrency } = useCurrency();
   const { formatDate } = useFormattedDate();
@@ -161,4 +161,4 @@ const FinancialTransactionCards: React.FC<Props> = ({ data, date }) => {
   );
 };
 
-export { FinancialTransactionCards };
+export { FinancialTransaction };

@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { RefreshControl, ScrollView, View } from "react-native";
 
 import { FinancePieChart } from "@/layouts/finance-pie-chart";
-import { FinancialTransactionCards } from "@/layouts/financial-transaction-cards";
-import { LatestTransactions } from "@/layouts/latest-transactions-cards";
+import { FinancialTransaction } from "@/layouts/financial-transaction";
+import { LatestTransactions } from "@/layouts/latest-transactions";
 
 import { useLatestTransactionsStore } from "@/storages/useLatestTransactionsStore";
 import { useFinanceTransactionStore } from "@/storages/useFinanceTransactionStore";
@@ -64,7 +64,7 @@ export default function Index() {
       className="bg-light-background-secondary dark:bg-dark-background-alternative p-4"
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
     >
-      <FinancialTransactionCards data={latestData} date={new Date()} />
+      <FinancialTransaction data={latestData} date={new Date()} />
       <FinancePieChart data={latestData} />
       <LatestTransactions data={financeData} />
       <View className="min-h-11" />
