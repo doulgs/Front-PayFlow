@@ -39,9 +39,9 @@ export interface FinanceTransaction {
   note?: string;
 }
 
-export interface LatestTransactionsProps {
-  key: string;
+export type LatestTransactionProps = {
+  key: "incoming" | "expenses" | "receivables" | "payables";
   label: string;
   value: number;
   color: string;
-}
+};

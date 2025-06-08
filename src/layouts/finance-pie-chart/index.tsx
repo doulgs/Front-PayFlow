@@ -3,12 +3,12 @@ import { Card } from "@/components/ui/cards";
 import { ChartPie } from "lucide-react-native";
 import { Text, View, TouchableOpacity } from "react-native";
 import { PieChart } from "react-native-gifted-charts";
-import { LatestTransactionsProps } from "@/types/finance";
+import { LatestTransactionProps } from "@/types/finance";
 import { useTheme } from "@/hooks/useTheme";
 import { colors } from "@/styles/colors";
 
 interface Props {
-  data: LatestTransactionsProps[];
+  data: LatestTransactionProps[];
 }
 
 const FinancePieChart: React.FC<Props> = ({ data }) => {

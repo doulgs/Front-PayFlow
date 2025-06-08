@@ -2,7 +2,7 @@ import { Card } from "@/components/ui/cards";
 import { useTheme } from "@/hooks/useTheme";
 import { useCurrency } from "@/hooks/useCurrency";
 import { useVisibilityStore } from "@/storages/useVisibilityStore";
-import { LatestTransactionsProps } from "@/types/finance";
+import { LatestTransactionProps } from "@/types/finance";
 
 import {
   ArrowDownNarrowWide,
@@ -20,7 +20,7 @@ import { useFormattedDate } from "@/hooks/useFormattedDate";
 
 interface Props {
   date: Date;
-  data: LatestTransactionsProps[];
+  data: LatestTransactionProps[];
 }
 
 const FinancialTransactionCards: React.FC<Props> = ({ data, date }) => {

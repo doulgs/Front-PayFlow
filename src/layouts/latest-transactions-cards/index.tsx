@@ -3,9 +3,9 @@ import { useCurrency } from "@/hooks/useCurrency";
 import { useTheme } from "@/hooks/useTheme";
 import { useVisibilityStore } from "@/storages/useVisibilityStore";
 import { FinanceTransaction } from "@/types/finance";
-import clsx from "clsx";
+import { clsx } from "clsx";
 import { LayoutList } from "lucide-react-native";
-import { View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 
 const RECORD_DISPLAY_LIMIT = 7;
 
@@ -34,7 +34,7 @@ const LatestTransactions: React.FC<LatestTransactionsProps> = ({ data }) => {
             className="px-1"
             items={data.slice(0, RECORD_DISPLAY_LIMIT)}
             renderItem={(item) => (
-              <Card key={item.id} variant="ghost" className="p-0" onPress={() => console.log(`teste`)}>
+              <TouchableOpacity key={item.id} onPress={() => console.log(`teste`)}>
                 <Card.Body className="flex-row items-center justify-between gap-2">
                   <Card.Icon variant="outlined">
                     <Card.Text>
@@ -79,7 +79,7 @@ const LatestTransactions: React.FC<LatestTransactionsProps> = ({ data }) => {
                     </Card.Text>
                   </View>
                 </Card.Body>
-              </Card>
+              </TouchableOpacity>
             )}
           />
         </Card.Body>
