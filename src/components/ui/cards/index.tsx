@@ -1,66 +1,112 @@
-import React, { createContext, useContext } from "react";
-import { View } from "react-native";
+import React from "react";
+import { View, Text, TextProps, GestureResponderEvent, TouchableOpacity } from "react-native";
 import { clsx } from "clsx";
 
-type Variant = "default" | "outlined" | "ghost";
+type Variant = "default" | "outlined" | "ghost" | "success" | "danger" | "warning" | "info";
 
-type CardSectionProps = {
-  children: React.ReactNode;
-  className?: string;
-};
-
-type CardRootProps = {
+interface CardRootProps {
   children: React.ReactNode;
   className?: string;
   variant?: Variant;
+  onPress?: (event: GestureResponderEvent) => void;
+}
+
+interface CardSectionProps {
+  children: React.ReactNode;
+  className?: string;
+  variant?: Variant;
+}
+
+interface CardTextProps extends TextProps {
+  variant?: Variant;
+  className?: string;
+}
+
+interface CardIconProps {
+  children: React.ReactNode;
+  className?: string;
+  variant?: Variant;
+  onPress?: (event: GestureResponderEvent) => void;
+}
+
+const bgVariantClasses: Record<Variant, string> = {
+  default: "bg-light-background-primary dark:bg-dark-background-primary shadow-md",
+  outlined:
+    "border border-neutral-200 dark:border-neutral-800 bg-light-background-primary dark:bg-dark-background-primary",
+  ghost: "bg-transparent",
+  success: "bg-green-100 dark:bg-green-900 border border-green-300 dark:border-green-700",
+  danger: "bg-red-100 dark:bg-red-900 border border-red-300 dark:border-red-700",
+  warning: "bg-yellow-100 dark:bg-yellow-900 border border-yellow-300 dark:border-yellow-700",
+  info: "bg-blue-100 dark:bg-blue-900 border border-blue-300 dark:border-blue-700",
 };
 
-const CardContext = createContext<{ variant: Variant }>({ variant: "default" });
+const textVariantClasses: Record<Variant, string> = {
+  default: "text-zinc-800 dark:text-zinc-100",
+  outlined: "text-blue-800 dark:text-blue-200",
+  ghost: "text-zinc-400 dark:text-zinc-400",
+  success: "text-green-800 dark:text-green-200",
+  danger: "text-red-800 dark:text-red-200",
+  warning: "text-yellow-800 dark:text-yellow-200",
+  info: "text-blue-800 dark:text-blue-200",
+};
 
-const CardRoot: React.FC<CardRootProps> = ({ children, className, variant = "default" }) => {
-  const variantClasses = {
-    default: "bg-white dark:bg-zinc-900 shadow-md",
-    outlined: "border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900",
-    ghost: "bg-transparent",
-  };
+const CardRoot: React.FC<CardRootProps> = ({ children, className, variant = "default", onPress }) => {
+  const Wrapper = onPress ? TouchableOpacity : View;
+  const classNames = clsx(
+    "flex-1 rounded-xl overflow-hidden p-4",
+    bgVariantClasses[variant],
+    textVariantClasses[variant],
+    className
+  );
 
   return (
-    <CardContext.Provider value={{ variant }}>
-      <View className={clsx("flex-1 rounded-xl overflow-hidden p-4", variantClasses[variant], className)}>
-        {children}
-      </View>
-    </CardContext.Provider>
+    <Wrapper className={classNames} onPress={onPress}>
+      {children}
+    </Wrapper>
   );
 };
 
-const CardHeader: React.FC<CardSectionProps> = ({ children, className }) => {
-  const { variant } = useContext(CardContext);
-  return <View className={clsx("mb-2", `card-header-${variant}`, className)}>{children}</View>;
+const CardHeader: React.FC<CardSectionProps> = ({ children, className, variant = "ghost" }) => {
+  return <View className={clsx("flex-row", textVariantClasses[variant], className)}>{children}</View>;
 };
 
-const CardBody: React.FC<CardSectionProps> = ({ children, className }) => {
-  const { variant } = useContext(CardContext);
-  return <View className={clsx("py-2", `card-body-${variant}`, className)}>{children}</View>;
+const CardBody: React.FC<CardSectionProps> = ({ children, className, variant = "ghost" }) => {
+  return <View className={clsx("py-2", textVariantClasses[variant], className)}>{children}</View>;
 };
 
-const CardFooter: React.FC<CardSectionProps> = ({ children, className }) => {
-  const { variant } = useContext(CardContext);
-  return <View className={clsx("mt-2", `card-footer-${variant}`, className)}>{children}</View>;
+const CardFooter: React.FC<CardSectionProps> = ({ children, className, variant = "ghost" }) => {
+  return <View className={clsx("", textVariantClasses[variant], className)}>{children}</View>;
 };
 
-type CardIconProps = {
-  children: React.ReactNode;
-  className?: string;
+const CardText: React.FC<CardTextProps> = ({ children, variant = "default", className, ...rest }) => {
+  return (
+    <Text className={clsx("", textVariantClasses[variant], className)} {...rest}>
+      {children}
+    </Text>
+  );
 };
 
-const CardIcon: React.FC<CardIconProps> = ({ children, className }) => {
-  const { variant } = useContext(CardContext);
-  return <View className={clsx("justify-center items-center", `card-icon-${variant}`, className)}>{children}</View>;
+const CardIcon: React.FC<CardIconProps> = ({ children, className, variant = "ghost", onPress }) => {
+  const Wrapper = onPress ? TouchableOpacity : View;
+
+  return (
+    <Wrapper
+      className={clsx(
+        "justify-center items-center rounded-xl overflow-hidden p-2",
+        bgVariantClasses[variant],
+        className
+      )}
+      onPress={onPress}
+    >
+      {children}
+    </Wrapper>
+  );
 };
 
 export const Card = Object.assign(CardRoot, {
   Header: CardHeader,
   Body: CardBody,
   Footer: CardFooter,
+  Text: CardText,
   Icon: CardIcon,
 });
