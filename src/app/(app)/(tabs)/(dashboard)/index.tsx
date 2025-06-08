@@ -1,17 +1,18 @@
 import React, { useState } from "react";
-import { ScrollView } from "react-native";
+import { ScrollView, View } from "react-native";
 
+import { FinancePieChart } from "@/layouts/finance-pie-chart";
 import { FinancialTransactionCards } from "@/layouts/financial-transaction-cards";
 import { LatestTransactions } from "@/layouts/latest-transactions-cards";
 import { FinanceTransaction, LatestTransactionsProps } from "@/types/finance";
 
 export default function Index() {
-  const [LatestList] = useState<LatestTransactionsProps>({
-    incoming: 654321,
-    expenses: 123456,
-    receivables: 987654,
-    payables: 456123,
-  });
+  const [LatestList] = useState<LatestTransactionsProps[]>([
+    { key: `incoming`, label: `incoming`, value: 654321, color: `#22C55E` },
+    { key: `expenses`, label: `expenses`, value: 123456, color: `#EF4444` },
+    { key: `receivables`, label: `receivables`, value: 987654, color: `#3B82F6` },
+    { key: `payables`, label: `payables`, value: 456123, color: `#FACC15` },
+  ]);
 
   const [financeList] = useState<FinanceTransaction[]>([
     {
@@ -41,7 +42,9 @@ export default function Index() {
   return (
     <ScrollView className="bg-light-background-secondary dark:bg-dark-background-alternative p-4">
       <FinancialTransactionCards data={LatestList} date={new Date()} />
+      <FinancePieChart data={LatestList} />
       <LatestTransactions data={financeList} />
+      <View className="min-h-11" />
     </ScrollView>
   );
 }
