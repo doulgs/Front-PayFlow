@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, TextProps, GestureResponderEvent, TouchableOpacity, FlatList, FlatListProps } from "react-native";
 import { clsx } from "clsx";
 
-type Variant = "default" | "outlined" | "ghost" | "success" | "danger" | "warning" | "info";
+type Variant = "default" | "outlined" | "ghost" | "success" | "danger" | "warning" | "info" | "muted";
 
 interface CardRootProps {
   children: React.ReactNode;
@@ -49,6 +49,7 @@ const bgVariantClasses: Record<Variant, string> = {
   danger: "bg-red-100 dark:bg-red-900 border border-red-300 dark:border-red-700",
   warning: "bg-yellow-100 dark:bg-yellow-900 border border-yellow-300 dark:border-yellow-700",
   info: "bg-blue-100 dark:bg-blue-900 border border-blue-300 dark:border-blue-700",
+  muted: "bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700",
 };
 
 const textVariantClasses: Record<Variant, string> = {
@@ -59,6 +60,7 @@ const textVariantClasses: Record<Variant, string> = {
   danger: "text-red-800 dark:text-red-200",
   warning: "text-yellow-800 dark:text-yellow-200",
   info: "text-blue-800 dark:text-blue-200",
+  muted: "text-zinc-800 dark:text-zinc-100",
 };
 
 const CardRoot: React.FC<CardRootProps> = ({ children, className, variant = "default", onPress }) => {
