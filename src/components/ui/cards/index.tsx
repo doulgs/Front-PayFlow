@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TextProps, GestureResponderEvent, TouchableOpacity } from "react-native";
+import { View, Text, TextProps, GestureResponderEvent, TouchableOpacity, FlatList, FlatListProps } from "react-native";
 import { clsx } from "clsx";
 
 type Variant = "default" | "outlined" | "ghost" | "success" | "danger" | "warning" | "info";
@@ -27,6 +27,17 @@ interface CardIconProps {
   className?: string;
   variant?: Variant;
   onPress?: (event: GestureResponderEvent) => void;
+}
+
+interface CardListProps<T> extends FlatListProps<T> {
+  className?: string;
+}
+
+interface CardMapProps<T> {
+  items: T[];
+  renderItem: (item: T, index: number) => React.ReactNode;
+  className?: string;
+  variant?: Variant;
 }
 
 const bgVariantClasses: Record<Variant, string> = {
@@ -103,10 +114,26 @@ const CardIcon: React.FC<CardIconProps> = ({ children, className, variant = "gho
   );
 };
 
+const CardList = <T,>({ className, ...rest }: CardListProps<T>) => {
+  return <FlatList className={clsx("gap-2", className)} showsVerticalScrollIndicator={false} {...rest} />;
+};
+
+const CardMap = <T,>({ items, renderItem, className, variant = "default" }: CardMapProps<T>) => {
+  return (
+    <View className={clsx("gap-2", bgVariantClasses[variant], textVariantClasses[variant], className)}>
+      {items.map((item, index) => (
+        <React.Fragment key={index}>{renderItem(item, index)}</React.Fragment>
+      ))}
+    </View>
+  );
+};
+
 export const Card = Object.assign(CardRoot, {
   Header: CardHeader,
   Body: CardBody,
   Footer: CardFooter,
   Text: CardText,
   Icon: CardIcon,
+  List: CardList,
+  Map: CardMap,
 });
