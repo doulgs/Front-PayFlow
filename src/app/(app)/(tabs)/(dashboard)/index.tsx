@@ -1,10 +1,17 @@
-import React from "react";
-import { Text, View } from "react-native";
+import React, { useState } from "react";
+import { ScrollView } from "react-native";
+
+import { FinancialTransactionCards } from "@/layouts/financial-transaction-cards";
 
 export default function Index() {
+  const [financialMovement, setFinancialMovement] = useState({
+    entries: 2500,
+    exits: 1250,
+  });
+
   return (
-    <View className="flex-1 bg-light-background-secondary dark:bg-dark-background-alternative">
-      <Text>Index</Text>
-    </View>
+    <ScrollView className="bg-light-background-secondary dark:bg-dark-background-alternative p-4">
+      <FinancialTransactionCards entries={financialMovement.entries} exits={financialMovement.exits} />
+    </ScrollView>
   );
 }
