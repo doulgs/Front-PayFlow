@@ -65,8 +65,8 @@ export default function Index() {
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
     >
       <FinancialTransaction data={latestData} date={new Date()} />
-      <FinancePieChart data={latestData} />
-      <LatestTransactions data={financeData} />
+      <FinancePieChart data={latestData} isLoading={refreshing} />
+      <LatestTransactions data={financeData} isLoading={refreshing} />
       <View className="min-h-11" />
     </ScrollView>
   );

@@ -1,25 +1,26 @@
 import React, { useState } from "react";
+import { ActivityIndicator, TouchableOpacity, View } from "react-native";
+
 import { Card } from "@/components/ui/cards";
-import { ChartPie } from "lucide-react-native";
-import { Text, View, TouchableOpacity } from "react-native";
-import { PieChart } from "react-native-gifted-charts";
-import { LatestTransactionProps } from "@/types/finance";
 import { useTheme } from "@/hooks/useTheme";
 import { colors } from "@/styles/colors";
+import { LatestTransactionProps } from "@/types/finance";
+import { ChartPie } from "lucide-react-native";
+import { PieChart } from "react-native-gifted-charts";
 
 import ImageNoData from "@/assets/images/pie-chart-amico.svg";
 
 interface Props {
   data: LatestTransactionProps[];
+  isLoading?: boolean;
 }
 
-const FinancePieChart: React.FC<Props> = ({ data }) => {
+const FinancePieChart: React.FC<Props> = ({ data, isLoading = false }) => {
   const { currentTheme } = useTheme();
   const [focusedKey, setFocusedKey] = useState<string>("");
 
-  const [noData] = useState<boolean>(true);
-
   const total = data.reduce((acc, cur) => acc + cur.value, 0);
+  const hasNoData = data.length === 0 || data.every((item) => item.value === 0);
   const focusedItem = data.find((item) => item.key === focusedKey);
   const focusedPercentage = ((focusedItem?.value ?? 0) / total) * 100;
   const iconColor = currentTheme === "dark" ? "white" : "black";
@@ -29,7 +30,9 @@ const FinancePieChart: React.FC<Props> = ({ data }) => {
     value: item.value,
     color: item.color,
     focused: item.key === focusedKey,
-    onPress: () => setFocusedKey(item.key),
+    onPress: () => {
+      setFocusedKey((prev) => (prev === item.key ? "" : item.key));
+    },
   }));
 
   return (
@@ -41,11 +44,16 @@ const FinancePieChart: React.FC<Props> = ({ data }) => {
         <Card.Text className="text-lg font-semibold">Distribuição Financeira</Card.Text>
       </Card.Header>
 
-      {noData ? (
+      {isLoading ? (
+        <Card.Body className="items-center justify-center my-6">
+          <ActivityIndicator size="large" color={colors.light.brand.primary} />
+          <Card.Text className="mt-2 text-sm text-muted">Carregando dados...</Card.Text>
+        </Card.Body>
+      ) : hasNoData ? (
         <Card.Body className="items-center justify-center my-2">
-          <ImageNoData width={200} height={200} />
+          <ImageNoData width={180} height={180} />
           <Card.Footer className="mt-2">
-            <Card.Text>Nenhum dado disponivel para renderizar</Card.Text>
+            <Card.Text className="text-sm text-muted">Nenhum dado disponível para renderizar</Card.Text>
           </Card.Footer>
         </Card.Body>
       ) : (
@@ -68,11 +76,12 @@ const FinancePieChart: React.FC<Props> = ({ data }) => {
               }
             />
           </Card.Body>
+
           <Card.Footer className="flex-row flex-wrap justify-center px-2 py-1 gap-y-2">
             {data.map((item) => (
               <TouchableOpacity
                 key={item.key}
-                onPress={() => setFocusedKey(item.key)}
+                onPress={() => setFocusedKey((prev) => (prev === item.key ? "" : item.key))}
                 style={{ width: "50%", alignItems: "center" }}
               >
                 <View className="flex-row items-center">

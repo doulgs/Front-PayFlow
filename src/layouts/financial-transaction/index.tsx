@@ -1,9 +1,12 @@
+import React, { useState } from "react";
+import { View } from "react-native";
+
 import { Card } from "@/components/ui/cards";
-import { useTheme } from "@/hooks/useTheme";
 import { useCurrency } from "@/hooks/useCurrency";
+import { useFormattedDate } from "@/hooks/useFormattedDate";
+import { useTheme } from "@/hooks/useTheme";
 import { useVisibilityStore } from "@/storages/useVisibilityStore";
 import { LatestTransactionProps } from "@/types/finance";
-
 import {
   ArrowDownNarrowWide,
   ArrowUpNarrowWide,
@@ -13,10 +16,7 @@ import {
   EyeClosed,
   Landmark,
 } from "lucide-react-native";
-import React, { useState } from "react";
-import { View } from "react-native";
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
-import { useFormattedDate } from "@/hooks/useFormattedDate";
 
 interface Props {
   date: Date;
