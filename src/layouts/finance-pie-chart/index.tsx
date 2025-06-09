@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { ActivityIndicator, TouchableOpacity, View } from "react-native";
 
 import { Card } from "@/components/ui/cards";
+import { useChangeLanguage } from "@/hooks/useChangeLanguage";
 import { useTheme } from "@/hooks/useTheme";
 import { colors } from "@/styles/colors";
 import { LatestTransactionProps } from "@/types/finance";
@@ -16,6 +17,7 @@ interface Props {
 }
 
 const FinancePieChart: React.FC<Props> = ({ data, isLoading = false }) => {
+  const { t } = useChangeLanguage();
   const { currentTheme } = useTheme();
   const [focusedKey, setFocusedKey] = useState<string>("");
 
@@ -41,19 +43,19 @@ const FinancePieChart: React.FC<Props> = ({ data, isLoading = false }) => {
         <Card.Icon>
           <ChartPie size={20} color={iconColor} />
         </Card.Icon>
-        <Card.Text className="text-lg font-semibold">Distribuição Financeira</Card.Text>
+        <Card.Text className="text-lg font-semibold">{t("finance.pie-chart.title")}</Card.Text>
       </Card.Header>
 
       {isLoading ? (
         <Card.Body className="items-center justify-center my-6">
           <ActivityIndicator size="large" color={colors.light.brand.primary} />
-          <Card.Text className="mt-2 text-sm text-muted">Carregando dados...</Card.Text>
+          <Card.Text className="mt-2 text-sm text-muted">{t("finance.pie-chart.loading")}</Card.Text>
         </Card.Body>
       ) : hasNoData ? (
         <Card.Body className="items-center justify-center my-2">
           <ImageNoData width={180} height={180} />
           <Card.Footer className="mt-2">
-            <Card.Text className="text-sm text-muted">Nenhum dado disponível para renderizar</Card.Text>
+            <Card.Text className="text-sm text-muted">{t("finance.pie-chart.empty")}</Card.Text>
           </Card.Footer>
         </Card.Body>
       ) : (

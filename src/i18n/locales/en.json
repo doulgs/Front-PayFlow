@@ -38,5 +38,8 @@
   "finance.latest.title": "Latest transactions",
   "finance.latest.loading": "Loading data...",
   "finance.latest.empty": "No transactions made",
-  "finance.latest.see-more": "See more"
+  "finance.latest.see-more": "See more",
+  "finance.pie-chart.title": "Financial Distribution",
+  "finance.pie-chart.loading": "Loading data...",
+  "finance.pie-chart.empty": "No data available to render"
 }
