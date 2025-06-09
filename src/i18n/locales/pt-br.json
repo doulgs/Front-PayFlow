@@ -34,5 +34,9 @@
   "finance.transaction.label.income": "Entradas",
   "finance.transaction.label.outcome": "Saídas",
   "finance.transaction.label.to-receive": "A Receber",
-  "finance.transaction.label.to-pay": "A Pagar"
+  "finance.transaction.label.to-pay": "A Pagar",
+  "finance.latest.title": "Últimos lançamentos",
+  "finance.latest.loading": "Carregando dados...",
+  "finance.latest.empty": "Nenhum lançamento realizado",
+  "finance.latest.see-more": "Ver mais"
 }

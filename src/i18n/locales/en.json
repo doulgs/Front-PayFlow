@@ -34,5 +34,9 @@
   "finance.transaction.label.income": "Incomes",
   "finance.transaction.label.outcome": "Outcomes",
   "finance.transaction.label.to-receive": "Receivables",
-  "finance.transaction.label.to-pay": "Payables"
+  "finance.transaction.label.to-pay": "Payables",
+  "finance.latest.title": "Latest transactions",
+  "finance.latest.loading": "Loading data...",
+  "finance.latest.empty": "No transactions made",
+  "finance.latest.see-more": "See more"
 }

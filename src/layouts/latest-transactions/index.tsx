@@ -1,6 +1,8 @@
 import React from "react";
+import { ActivityIndicator, TouchableOpacity, View } from "react-native";
 
 import { Card } from "@/components/ui/cards";
+import { useChangeLanguage } from "@/hooks/useChangeLanguage";
 import { useCurrency } from "@/hooks/useCurrency";
 import { useTheme } from "@/hooks/useTheme";
 import { useVisibilityStore } from "@/storages/useVisibilityStore";
@@ -8,7 +10,6 @@ import { colors } from "@/styles/colors";
 import { FinanceTransaction } from "@/types/finance";
 import { clsx } from "clsx";
 import { LayoutList } from "lucide-react-native";
-import { ActivityIndicator, TouchableOpacity, View } from "react-native";
 
 import ImageNoData from "@/assets/images/research-paper-amico.svg";
 
@@ -20,6 +21,7 @@ type LatestTransactionsProps = {
 };
 
 const LatestTransactions: React.FC<LatestTransactionsProps> = ({ data, isLoading = false }) => {
+  const { t } = useChangeLanguage();
   const { currentTheme } = useTheme();
   const { formatCurrency } = useCurrency();
   const { isVisible } = useVisibilityStore();
@@ -32,19 +34,19 @@ const LatestTransactions: React.FC<LatestTransactionsProps> = ({ data, isLoading
         <Card.Icon>
           <LayoutList size={20} color={currentTheme === "dark" ? "white" : "black"} />
         </Card.Icon>
-        <Card.Text className="text-lg font-semibold">Últimos lançamentos</Card.Text>
+        <Card.Text className="text-lg font-semibold">{t("finance.latest.title")}</Card.Text>
       </Card.Header>
 
       {isLoading ? (
         <Card.Body className="items-center justify-center my-6">
           <ActivityIndicator size="large" color={colors.light.brand.primary} />
-          <Card.Text className="mt-2 text-sm text-muted">Carregando dados...</Card.Text>
+          <Card.Text className="mt-2 text-sm text-muted">{t("finance.latest.loading")}</Card.Text>
         </Card.Body>
       ) : hasNoData ? (
         <Card.Body className="items-center justify-center my-4">
           <ImageNoData width={200} height={200} />
           <Card.Footer className="mt-2">
-            <Card.Text>Nenhum lançamento realizado</Card.Text>
+            <Card.Text>{t("finance.latest.empty")}</Card.Text>
           </Card.Footer>
         </Card.Body>
       ) : (
@@ -107,7 +109,7 @@ const LatestTransactions: React.FC<LatestTransactionsProps> = ({ data, isLoading
 
           {data.length >= RECORD_DISPLAY_LIMIT && (
             <Card.Footer className="items-center justify-center">
-              <Card.Text>Ver mais</Card.Text>
+              <Card.Text>{t("finance.latest.see-more")}</Card.Text>
             </Card.Footer>
           )}
         </>
