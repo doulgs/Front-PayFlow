@@ -32,7 +32,7 @@ const CustomTabBar = ({ state, navigation }: BottomTabBarProps) => {
   const { to } = useCustomNavigation();
 
   return (
-    <View className="flex-row bg-light-background-primary dark:bg-dark-background-primary border-t border-slate-300 dark:border-slate-600 py-4 px-2 justify-around">
+    <View className="flex-row bg-light-background-primary dark:bg-dark-background-primary border-t border-neutral-200 dark:border-neutral-800 py-4 px-2 justify-around">
       {state.routes.map((route, index) => {
         const tabInfo = tabs.find((tab) => route.name.includes(tab.route));
         const isFocused = state.index === index;

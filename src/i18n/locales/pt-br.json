@@ -28,5 +28,18 @@
   "stack.profile.subtitle": "Detalhes do perfil do usuário",
   "common.greeting.morning": "Bom dia",
   "common.greeting.afternoon": "Boa tarde",
-  "common.greeting.night": "Boa noite"
+  "common.greeting.night": "Boa noite",
+  "finance.transaction.label.month": "Exibir mais",
+  "finance.transaction.label.available": "Saldo Disponível",
+  "finance.transaction.label.income": "Entradas",
+  "finance.transaction.label.outcome": "Saídas",
+  "finance.transaction.label.to-receive": "A Receber",
+  "finance.transaction.label.to-pay": "A Pagar",
+  "finance.latest.title": "Últimos lançamentos",
+  "finance.latest.loading": "Carregando dados...",
+  "finance.latest.empty": "Nenhum lançamento realizado",
+  "finance.latest.see-more": "Ver mais",
+  "finance.pie-chart.title": "Distribuição Financeira",
+  "finance.pie-chart.loading": "Carregando dados...",
+  "finance.pie-chart.empty": "Nenhum dado disponível para renderizar"
 }
