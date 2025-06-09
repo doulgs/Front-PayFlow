@@ -28,5 +28,11 @@
   "stack.profile.subtitle": "User profile details",
   "common.greeting.morning": "Good morning",
   "common.greeting.afternoon": "Good afternoon",
-  "common.greeting.night": "Good evening"
+  "common.greeting.night": "Good evening",
+  "finance.transaction.label.month": "Show more",
+  "finance.transaction.label.available": "Available Balance",
+  "finance.transaction.label.income": "Incomes",
+  "finance.transaction.label.outcome": "Outcomes",
+  "finance.transaction.label.to-receive": "Receivables",
+  "finance.transaction.label.to-pay": "Payables"
 }

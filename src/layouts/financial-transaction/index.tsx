@@ -1,12 +1,6 @@
 import React, { useState } from "react";
 import { View } from "react-native";
-
-import { Card } from "@/components/ui/cards";
-import { useCurrency } from "@/hooks/useCurrency";
-import { useFormattedDate } from "@/hooks/useFormattedDate";
-import { useTheme } from "@/hooks/useTheme";
-import { useVisibilityStore } from "@/storages/useVisibilityStore";
-import { LatestTransactionProps } from "@/types/finance";
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import {
   ArrowDownNarrowWide,
   ArrowUpNarrowWide,
@@ -16,7 +10,14 @@ import {
   EyeClosed,
   Landmark,
 } from "lucide-react-native";
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+
+import { Card } from "@/components/ui/cards";
+import { useCurrency } from "@/hooks/useCurrency";
+import { useFormattedDate } from "@/hooks/useFormattedDate";
+import { useTheme } from "@/hooks/useTheme";
+import { useVisibilityStore } from "@/storages/useVisibilityStore";
+import { LatestTransactionProps } from "@/types/finance";
+import { useChangeLanguage } from "@/hooks/useChangeLanguage";
 
 interface Props {
   date: Date;
@@ -24,6 +25,7 @@ interface Props {
 }
 
 const FinancialTransaction: React.FC<Props> = ({ data, date }) => {
+  const { t } = useChangeLanguage();
   const { currentTheme } = useTheme();
   const { formatCurrency } = useCurrency();
   const { formatDate } = useFormattedDate();
@@ -55,13 +57,14 @@ const FinancialTransaction: React.FC<Props> = ({ data, date }) => {
         <Card.Text className="text-sm">{formatDate(date.toISOString(), "month-year")}</Card.Text>
         <View className="flex-row items-center justify-center">
           <Card.Text className="text-sm" onPress={handleToggleDetails}>
-            Exibir mais
+            {t("finance.transaction.label.month")}
           </Card.Text>
           <Card.Icon onPress={handleToggleDetails}>
             {showDetails ? <ChevronUp size={16} color={iconColor} /> : <ChevronDown size={16} color={iconColor} />}
           </Card.Icon>
         </View>
       </View>
+
       <Card variant="outlined" className="mb-4">
         <Card.Body className="flex-row gap-2">
           <Card.Icon variant="muted">
@@ -70,13 +73,12 @@ const FinancialTransaction: React.FC<Props> = ({ data, date }) => {
           <View className="flex-1 flex-row justify-between">
             <View>
               <Card.Text variant="ghost" className="font-semibold text-sm">
-                Saldo Disponível
+                {t("finance.transaction.label.available")}
               </Card.Text>
               <Card.Text className="font-bold text-xl">
                 {isVisible ? "*******" : formatCurrency(data[0].value - data[1].value)}
               </Card.Text>
             </View>
-
             <View className="flex-row gap-2 items-center">
               <Card.Icon onPress={toggleVisibility}>
                 {isVisible ? <EyeClosed size={20} color={iconColor} /> : <Eye size={20} color={iconColor} />}
@@ -86,16 +88,15 @@ const FinancialTransaction: React.FC<Props> = ({ data, date }) => {
         </Card.Body>
       </Card>
 
-      {/* Entradas e Saídas */}
       <View className="flex flex-row gap-4">
         <Card variant="outlined" className="mb-4 flex-1">
           <Card.Body className="flex-row gap-2">
             <Card.Icon variant="success">
-              <ArrowUpNarrowWide size={20} color={"#22C55E"} />
+              <ArrowUpNarrowWide size={20} color="#22C55E" />
             </Card.Icon>
             <View>
               <Card.Text variant="ghost" className="font-semibold text-sm">
-                Entradas
+                {t("finance.transaction.label.income")}
               </Card.Text>
               <Card.Text className="font-bold text-xl">
                 {isVisible ? "*******" : formatCurrency(data[0].value)}
@@ -107,11 +108,11 @@ const FinancialTransaction: React.FC<Props> = ({ data, date }) => {
         <Card variant="outlined" className="mb-4 flex-1">
           <Card.Body className="flex-row gap-2">
             <Card.Icon variant="danger">
-              <ArrowDownNarrowWide size={20} color={"#c94848"} />
+              <ArrowDownNarrowWide size={20} color="#c94848" />
             </Card.Icon>
             <View>
               <Card.Text variant="ghost" className="font-semibold text-sm">
-                Saídas
+                {t("finance.transaction.label.outcome")}
               </Card.Text>
               <Card.Text className="font-bold text-xl">
                 {isVisible ? "*******" : formatCurrency(data[1].value)}
@@ -121,17 +122,16 @@ const FinancialTransaction: React.FC<Props> = ({ data, date }) => {
         </Card>
       </View>
 
-      {/* Animated A Receber e A Pagar */}
       <Animated.View style={[animatedStyle, { overflow: "hidden" }]}>
         <View className="flex flex-row gap-4">
           <Card variant="outlined" className="mb-4 flex-1">
             <Card.Body className="flex-row gap-2">
               <Card.Icon variant="info">
-                <ArrowUpNarrowWide size={20} color={"#3B82F6"} />
+                <ArrowUpNarrowWide size={20} color="#3B82F6" />
               </Card.Icon>
               <View>
                 <Card.Text variant="ghost" className="font-semibold text-sm">
-                  A Receber
+                  {t("finance.transaction.label.to-receive")}
                 </Card.Text>
                 <Card.Text className="font-bold text-xl">
                   {isVisible ? "*******" : formatCurrency(data[2].value)}
@@ -143,11 +143,11 @@ const FinancialTransaction: React.FC<Props> = ({ data, date }) => {
           <Card variant="outlined" className="mb-4 flex-1">
             <Card.Body className="flex-row gap-2">
               <Card.Icon variant="warning">
-                <ArrowDownNarrowWide size={20} color={"#FACC15"} />
+                <ArrowDownNarrowWide size={20} color="#FACC15" />
               </Card.Icon>
               <View>
                 <Card.Text variant="ghost" className="font-semibold text-sm">
-                  A Pagar
+                  {t("finance.transaction.label.to-pay")}
                 </Card.Text>
                 <Card.Text className="font-bold text-xl">
                   {isVisible ? "*******" : formatCurrency(data[3].value)}
