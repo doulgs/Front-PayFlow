@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 
 import { Card } from "@/components/ui/cards";
@@ -42,13 +42,13 @@ const FinancialTransaction: React.FC<Props> = ({ data, date }) => {
     height: height.value,
   }));
 
+  useEffect(() => {
+    opacity.value = withTiming(showDetails ? 1 : 0, { duration: 300 });
+    height.value = withTiming(showDetails ? 100 : 0, { duration: 300 });
+  }, [showDetails]);
+
   const handleToggleDetails = () => {
-    setShowDetails((prev) => {
-      const expanding = !prev;
-      opacity.value = withTiming(expanding ? 1 : 0, { duration: 300 });
-      height.value = withTiming(expanding ? 100 : 0, { duration: 300 });
-      return expanding;
-    });
+    setShowDetails((prev) => !prev);
   };
 
   return (
