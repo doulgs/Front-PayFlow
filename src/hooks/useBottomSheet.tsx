@@ -15,8 +15,10 @@ type BottomSheetHook = {
   BottomSheet: React.FC<BottomSheetProps>;
 };
 
-export const useBottomSheet = (externalRef?: RefObject<BottomSheetModal | null>): BottomSheetHook => {
-  const ref = externalRef ?? React.useRef<BottomSheetModal>(null);
+export interface BottomSheetRef extends BottomSheetModal {}
+
+export const useBottomSheet = (externalRef?: RefObject<BottomSheetRef | null>): BottomSheetHook => {
+  const ref = externalRef ?? React.useRef<BottomSheetRef>(null);
 
   const open = () => ref.current?.present();
   const close = () => ref.current?.dismiss();
