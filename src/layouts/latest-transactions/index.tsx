@@ -7,11 +7,12 @@ import { useVisibilityStore } from "@/storages/useVisibilityStore";
 import { colors } from "@/styles/colors";
 import { FinanceTransaction } from "@/types/finance";
 import { clsx } from "clsx";
-import { LayoutList } from "lucide-react-native";
+import { LayoutList, Trash2 } from "lucide-react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, TouchableOpacity, View } from "react-native";
 
 import ImageNoData from "@/assets/images/research-paper-amico.svg";
+import { Button } from "@/components/ui/buttons";
 
 const RECORD_DISPLAY_LIMIT = 7;
 
@@ -131,14 +132,33 @@ const LatestTransactions: React.FC<LatestTransactionsProps> = ({ data, isLoading
       </Card>
 
       <BottomSheet
-        title={t("common.greeting.afternoon")}
+        title="Detalhes"
         render={
           selectedTransaction && (
-            <View className="gap-4 p-2">
-              <Card.Text className="text-xl font-bold">{selectedTransaction.title}</Card.Text>
-              <Card.Text>{selectedTransaction.description}</Card.Text>
-              <Card.Text>{formatCurrency(selectedTransaction.value)}</Card.Text>
-            </View>
+            <Card variant="ghost" className="p-0">
+              <View className="py-4 px-6 items-center justify-center">
+                <Card.Text className="items-center text-center text-2xl">
+                  A conta <Card.Text className="font-bold">{selectedTransaction.title}</Card.Text>
+                  {"\n"}
+                  no valor de{" "}
+                  <Card.Text className="font-bold">{formatCurrency(selectedTransaction.value ?? 0)}</Card.Text>
+                  {"\n"}
+                  foi pago ?
+                </Card.Text>
+              </View>
+              <Card.Body className="flex-row gap-4 my-4">
+                <Button className="flex-1" variant="outline" title="Ainda nao" onPress={() => {}} />
+                <Button className="flex-1" title="Sim" onPress={() => {}} />
+              </Card.Body>
+              <Card.Footer className="border-t border-gray-500/20 dark:border-gray-500/20 p-2">
+                <Button
+                  title="Deletar"
+                  variant="ghost"
+                  leftIcon={<Trash2 size={18} color={"red"} />}
+                  onPress={() => {}}
+                />
+              </Card.Footer>
+            </Card>
           )
         }
       />

@@ -1,12 +1,12 @@
 import React from "react";
-import { clsx } from "clsx";
-import { Ionicons } from "@expo/vector-icons";
 import { Image, StatusBar, Text, TouchableOpacity, View, ViewStyle } from "react-native";
-import { useTheme } from "@/hooks/useTheme";
 
-import GradientLinear from "../ui/overlays/gradient-linear";
-import { useGreeting } from "@/hooks/useGreeting";
+import { GradientLinear } from "@/components/ui/overlays/gradient-linear";
 import { useChangeLanguage } from "@/hooks/useChangeLanguage";
+import { useGreeting } from "@/hooks/useGreeting";
+import { useTheme } from "@/hooks/useTheme";
+import { Ionicons } from "@expo/vector-icons";
+import { clsx } from "clsx";
 
 interface ActionsProps {
   className?: string;
@@ -67,7 +67,6 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   const textColorClass = "text-light-typography-inverse";
-  // const textColorClass = currentTheme === "dark" ? "text-dark-typography-inverse" : "text-light-typography-inverse";F
 
   const iconColor = currentTheme === "dark" ? "#000000" : "#FFFFFF";
 

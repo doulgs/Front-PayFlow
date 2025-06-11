@@ -20,7 +20,7 @@ interface ButtonProps extends TouchableOpacityProps {
 const variantClasses: Record<Variant, string> = {
   primary: "bg-light-brand-primary dark:bg-dark-brand-primary",
   secondary: "bg-light-surface-pressed/20 dark:bg-dark-surface-pressed/20",
-  outline: "border bg-transparent",
+  outline: "border bg-transparent border-gray-500/20 dark:border-gray-500/20",
   ghost: "bg-transparent",
 };
 
@@ -66,7 +66,7 @@ export function Button({
       activeOpacity={0.8}
       style={[variant === "primary" ? styles.elevation : undefined, style]}
       className={clsx(
-        "rounded-lg",
+        "rounded-lg w-full",
         "flex-row items-center justify-center",
         variantClasses[variant],
         paddingClasses[size],
@@ -81,7 +81,7 @@ export function Button({
       ) : (
         <>
           {leftIcon && <View className="mr-2">{leftIcon}</View>}
-          <View className="items-center flex-1 justify-center">
+          <View className="items-center justify-center">
             <Text
               className={clsx(
                 "font-semibold text-slate-700 dark:text-gray-100",
