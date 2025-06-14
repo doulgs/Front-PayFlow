@@ -39,6 +39,7 @@ export default function Index() {
       });
       return;
     }
+    to.app.stacks.launcher.details();
   };
 
   return (

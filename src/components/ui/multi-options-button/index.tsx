@@ -40,6 +40,7 @@ export function MultiOptionsButton({ options, defaultSelected, selected: selecte
             title={option}
             onPress={() => handlePress(option)}
             variant={isSelected ? "primary" : "outline"}
+            textVariant={isSelected ? "white" : "primary"}
             className={"flex-1 py-3 rounded-lg items-center"}
           />
         );
