@@ -1,12 +1,13 @@
 import React from "react";
-import { Image, StatusBar, Text, TouchableOpacity, View, ViewStyle } from "react-native";
+import { Image, Pressable, StatusBar, Text, TouchableOpacity, View, ViewStyle } from "react-native";
 
 import { GradientLinear } from "@/components/ui/overlays/gradient-linear";
 import { useChangeLanguage } from "@/hooks/useChangeLanguage";
+import { useCustomNavigation } from "@/hooks/useCustomNavigation";
 import { useGreeting } from "@/hooks/useGreeting";
 import { useTheme } from "@/hooks/useTheme";
-import { Ionicons } from "@expo/vector-icons";
 import { clsx } from "clsx";
+import { ChevronLeft } from "lucide-react-native";
 
 interface ActionsProps {
   className?: string;
@@ -53,9 +54,10 @@ export const Header: React.FC<HeaderProps> = ({
   transparentBackground = false,
   gradientBackground = true,
 }) => {
+  const { iconColor } = useTheme();
   const { t } = useChangeLanguage();
   const { greeting } = useGreeting();
-  const { currentTheme } = useTheme();
+  const { to } = useCustomNavigation();
   const title = options.title || route.name;
 
   const canGoBack = !hideBackButton && navigation?.canGoBack?.();
@@ -68,19 +70,19 @@ export const Header: React.FC<HeaderProps> = ({
 
   const textColorClass = "text-light-typography-inverse";
 
-  const iconColor = currentTheme === "dark" ? "#000000" : "#FFFFFF";
-
   const content = (
     <View className="flex-1 flex-row pr-2 pl-4 items-center justify-between">
       <View className="flex-row items-center gap-3">
         {canGoBack && (
           <TouchableOpacity onPress={() => navigation.goBack?.()} className="p-2">
-            <Ionicons name="chevron-back" size={24} color={iconColor} />
+            <ChevronLeft size={24} color={iconColor} />
           </TouchableOpacity>
         )}
 
         {showImageAvatar && imageAvatar && (
-          <Image source={{ uri: imageAvatar }} className="w-10 h-10 border border-stone-800 rounded-lg" />
+          <Pressable onPress={() => to.app.stacks.profile.home()}>
+            <Image source={{ uri: imageAvatar }} className="w-10 h-10 border border-stone-800 rounded-lg" />
+          </Pressable>
         )}
 
         <View>
