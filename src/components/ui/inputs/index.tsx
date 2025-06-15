@@ -1,21 +1,23 @@
-import React from "react";
-import { Controller, Control, FieldValues, Path, RegisterOptions } from "react-hook-form";
-import { Text, TouchableOpacity, View } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { clsx } from "clsx";
+import React from "react";
+import { Control, Controller, FieldValues, Path, RegisterOptions } from "react-hook-form";
+import { Text, TouchableOpacity, View } from "react-native";
 
-import { PasswordInput } from "@/components/ui/inputs/InputsTypes/password";
-import { EmailInput } from "@/components/ui/inputs/InputsTypes/mail";
-import { CPFInput } from "@/components/ui/inputs/InputsTypes/cpf";
-import { CNPJInput } from "@/components/ui/inputs/InputsTypes/cnpj";
-import { NumberInput } from "@/components/ui/inputs/InputsTypes/number";
-import { CurrencyInput } from "@/components/ui/inputs/InputsTypes/currency";
 import { AreaInput } from "@/components/ui/inputs/InputsTypes/area";
+import { CNPJInput } from "@/components/ui/inputs/InputsTypes/cnpj";
+import { CPFInput } from "@/components/ui/inputs/InputsTypes/cpf";
+import { CurrencyInput } from "@/components/ui/inputs/InputsTypes/currency";
 import { DateInput } from "@/components/ui/inputs/InputsTypes/date";
 import { DocumentInput } from "@/components/ui/inputs/InputsTypes/document";
 import { FilePickerInput } from "@/components/ui/inputs/InputsTypes/file-picker";
+import { EmailInput } from "@/components/ui/inputs/InputsTypes/mail";
 import { MultiSelectInput } from "@/components/ui/inputs/InputsTypes/multi-select";
+import { NumberInput } from "@/components/ui/inputs/InputsTypes/number";
+import { PasswordInput } from "@/components/ui/inputs/InputsTypes/password";
 import { TextInputField } from "@/components/ui/inputs/InputsTypes/text";
+import { useTheme } from "@/hooks/useTheme";
+import { colors } from "@/styles/colors";
+import { CircleX } from "lucide-react-native";
 import { SelectInput } from "./InputsTypes/select";
 
 const inputTypeComponents = {
@@ -55,8 +57,7 @@ const isValueFilled = (value: any) =>
 const baseStyles = "flex-row items-center h-12 min-h-[48px]";
 
 const variants = {
-  outline:
-    "flex-1 rounded-lg border border-slate-400 bg-light-background-alternative dark:bg-dark-background-alternative px-4",
+  outline: "flex-1 rounded-lg bg-light-background-alternative dark:bg-dark-background-primary px-4",
   flat: "flex-1 border-b border-slate-400 rounded-none bg-transparent dark:bg-transparent text-red-500 px-0",
   text: "flex-1 bg-transparent border-0 rounded-none px-0",
 };
@@ -73,7 +74,10 @@ const CustomInput = <T extends FieldValues = FieldValues>({
   onItemSelect,
   ...rest
 }: CustomInputProps<T>) => {
+  const { currentTheme } = useTheme();
   const InputComponent = inputTypeComponents[type] || TextInputField;
+
+  const iconColor = currentTheme === "dark" ? colors.dark.typography.secondary : colors.light.typography.secondary;
 
   return (
     <View className="w-full mb-4">
@@ -102,7 +106,7 @@ const CustomInput = <T extends FieldValues = FieldValues>({
               />
               {isValueFilled(value) && type !== "multiSelect" && type !== "file" && (
                 <TouchableOpacity onPress={() => onChange("")} className="ml-2">
-                  <Ionicons name="close-circle-outline" size={20} color="#9CA3AF" />
+                  <CircleX size={20} color={iconColor} />
                 </TouchableOpacity>
               )}
             </View>
