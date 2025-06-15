@@ -16,7 +16,6 @@ import { NumberInput } from "@/components/ui/inputs/InputsTypes/number";
 import { PasswordInput } from "@/components/ui/inputs/InputsTypes/password";
 import { TextInputField } from "@/components/ui/inputs/InputsTypes/text";
 import { useTheme } from "@/hooks/useTheme";
-import { colors } from "@/styles/colors";
 import { CircleX } from "lucide-react-native";
 import { SelectInput } from "./InputsTypes/select";
 
@@ -74,10 +73,8 @@ const CustomInput = <T extends FieldValues = FieldValues>({
   onItemSelect,
   ...rest
 }: CustomInputProps<T>) => {
-  const { currentTheme } = useTheme();
+  const { iconColor } = useTheme();
   const InputComponent = inputTypeComponents[type] || TextInputField;
-
-  const iconColor = currentTheme === "dark" ? colors.dark.typography.secondary : colors.light.typography.secondary;
 
   return (
     <View className="w-full mb-4">

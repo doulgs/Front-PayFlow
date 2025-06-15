@@ -5,10 +5,9 @@ import { Button } from "@/components/ui/buttons";
 import { CustomInput } from "@/components/ui/inputs";
 import { MultiOptionsButton } from "@/components/ui/multi-options-button";
 import { useCurrency } from "@/hooks/useCurrency";
-import { Controller, useForm } from "react-hook-form";
-import { AlignLeft, CalendarDays, DollarSign, FileDigit, LetterText } from "lucide-react-native";
 import { useTheme } from "@/hooks/useTheme";
-import { colors } from "@/styles/colors";
+import { AlignLeft, CalendarDays, DollarSign, FileDigit, LetterText } from "lucide-react-native";
+import { Controller, useForm } from "react-hook-form";
 
 interface FormData {
   type: "Entrada" | "Saida" | "Outros";
@@ -22,10 +21,8 @@ interface FormData {
 }
 
 const Details = () => {
-  const { currentTheme } = useTheme();
+  const { iconColor } = useTheme();
   const { formatCurrency } = useCurrency();
-
-  const iconColor = currentTheme === "dark" ? colors.dark.typography.secondary : colors.light.typography.secondary;
 
   const {
     control,

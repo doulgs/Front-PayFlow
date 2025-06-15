@@ -1,8 +1,7 @@
-import { View, Text, TouchableOpacity, Animated } from "react-native";
-import { useEffect, useState, useRef } from "react";
-import clsx from "clsx";
+import { useTheme } from "@/hooks/useTheme";
+import { useEffect, useRef, useState } from "react";
+import { Animated, View } from "react-native";
 import { Button } from "../buttons";
-import { colors } from "@/styles/colors";
 
 interface Props {
   options: string[];
@@ -12,6 +11,7 @@ interface Props {
 }
 
 export function MultiOptionsButton({ options, defaultSelected, selected: selectedProp, onChange }: Props) {
+  const { palette } = useTheme();
   const [internalSelected, setInternalSelected] = useState<string>(defaultSelected ?? options[0]);
   const selected = selectedProp ?? internalSelected;
   const [buttonWidth, setButtonWidth] = useState(0);
@@ -59,7 +59,7 @@ export function MultiOptionsButton({ options, defaultSelected, selected: selecte
           height: "100%",
           width: buttonWidth - 24,
           left: animatedLeft,
-          backgroundColor: colors.light.brand.primary,
+          backgroundColor: palette.brand.primary,
           borderRadius: 8,
         }}
       />

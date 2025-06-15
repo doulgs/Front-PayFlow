@@ -4,7 +4,6 @@ import { useChangeLanguage } from "@/hooks/useChangeLanguage";
 import { useCurrency } from "@/hooks/useCurrency";
 import { useTheme } from "@/hooks/useTheme";
 import { useVisibilityStore } from "@/storages/useVisibilityStore";
-import { colors } from "@/styles/colors";
 import { FinanceTransaction } from "@/types/finance";
 import { clsx } from "clsx";
 import { LayoutList, Trash2 } from "lucide-react-native";
@@ -23,7 +22,7 @@ type LatestTransactionsProps = {
 
 const LatestTransactions: React.FC<LatestTransactionsProps> = ({ data, isLoading = false }) => {
   const { t } = useChangeLanguage();
-  const { currentTheme } = useTheme();
+  const { palette, iconColor } = useTheme();
   const { formatCurrency } = useCurrency();
   const { isVisible } = useVisibilityStore();
 
@@ -47,14 +46,14 @@ const LatestTransactions: React.FC<LatestTransactionsProps> = ({ data, isLoading
       <Card variant="outlined">
         <Card.Header className="items-center px-1 gap-2">
           <Card.Icon>
-            <LayoutList size={20} color={currentTheme === "dark" ? "white" : "black"} />
+            <LayoutList size={18} color={iconColor} />
           </Card.Icon>
           <Card.Text className="text-lg font-semibold">{t("finance.latest.title")}</Card.Text>
         </Card.Header>
 
         {isLoading ? (
           <Card.Body className="items-center justify-center my-6">
-            <ActivityIndicator size="large" color={colors.light.brand.primary} />
+            <ActivityIndicator size="large" color={palette.brand.primary} />
             <Card.Text className="mt-2 text-sm text-muted">{t("finance.latest.loading")}</Card.Text>
           </Card.Body>
         ) : hasNoData ? (
