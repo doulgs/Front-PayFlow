@@ -1,7 +1,9 @@
+import React, { RefObject, useCallback } from "react";
+
 import { Card } from "@/components/ui/cards";
 import { BottomSheetBackdrop, BottomSheetBackdropProps, BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
-import { View, X } from "lucide-react-native";
-import React, { RefObject, useCallback } from "react";
+import { X } from "lucide-react-native";
+import { useTheme } from "@/hooks/useTheme";
 
 interface BottomSheetProps {
   hideHeader?: boolean;
@@ -18,6 +20,7 @@ type BottomSheetHook = {
 export interface BottomSheetRef extends BottomSheetModal {}
 
 export const useBottomSheet = (externalRef?: RefObject<BottomSheetRef | null>): BottomSheetHook => {
+  const { iconColor } = useTheme();
   const ref = externalRef ?? React.useRef<BottomSheetRef>(null);
 
   const open = () => ref.current?.present();
@@ -48,7 +51,7 @@ export const useBottomSheet = (externalRef?: RefObject<BottomSheetRef | null>): 
             <Card.Header className="items-center justify-between">
               <Card.Text className="text-2xl">{title}</Card.Text>
               <Card.Icon onPress={close}>
-                <X size={20} />
+                <X size={20} color={iconColor} />
               </Card.Icon>
             </Card.Header>
             {render}
