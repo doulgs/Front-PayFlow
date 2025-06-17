@@ -76,7 +76,7 @@ const DATE_FORMATS = {
   month: "MM",
   monthNameShort: "MMM",
   monthNameLong: "MMMM",
-  monthYear: "MMMM/YYYY",
+  monthYear: "MMM/YY",
   year: "YYYY",
   quarter: "Qo [trimestre]",
   weekOfYear: "Wo [semana]",
@@ -85,7 +85,8 @@ const DATE_FORMATS = {
 function formatDateTime(
   inputDate?: Date | string,
   style: DateFormatStyle = "dateMedium",
-  tz: string = DEFAULT_TIMEZONE
+  tz: string = DEFAULT_TIMEZONE,
+  locale: string = "pt-br"
 ): string {
   if (!inputDate) return "Data não informada";
 
@@ -94,6 +95,8 @@ function formatDateTime(
   if (!date.isValid()) {
     return `Data inválida: ${inputDate}`;
   }
+
+  dayjs.locale(locale);
 
   if (style === "isoDateTime") {
     return date.toISOString();
@@ -106,9 +109,9 @@ function getCurrentDateTimeISO(tz: string = DEFAULT_TIMEZONE): string {
   return dayjs().tz(tz).toISOString();
 }
 
-export function useDate(tz: string = DEFAULT_TIMEZONE) {
+export function useDate(tz: string = DEFAULT_TIMEZONE, locale: string = "pt-br") {
   return {
-    formatDateTime: (date?: Date | string, style?: DateFormatStyle) => formatDateTime(date, style, tz),
+    formatDateTime: (date?: Date | string, style?: DateFormatStyle) => formatDateTime(date, style, tz, locale),
     getCurrentDateTimeISO: () => getCurrentDateTimeISO(tz),
   };
 }

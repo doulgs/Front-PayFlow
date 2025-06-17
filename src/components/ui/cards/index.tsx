@@ -41,15 +41,15 @@ interface CardMapProps<T> {
 }
 
 const bgVariantClasses: Record<Variant, string> = {
-  default: "bg-light-background-primary dark:bg-dark-background-primary shadow-md",
+  default: "bg-light-background-primary dark:bg-dark-background-primary shadow",
   outlined:
-    "border border-neutral-200 dark:border-neutral-800 bg-light-background-primary dark:bg-dark-background-primary",
+    "border border-neutral-200 dark:border-neutral-800 bg-light-background-primary dark:bg-dark-background-primary shadow",
   ghost: "bg-transparent",
-  success: "bg-green-100 dark:bg-green-900 border border-green-300 dark:border-green-700",
-  danger: "bg-red-100 dark:bg-red-900 border border-red-300 dark:border-red-700",
-  warning: "bg-yellow-100 dark:bg-yellow-900 border border-yellow-300 dark:border-yellow-700",
-  info: "bg-blue-100 dark:bg-blue-900 border border-blue-300 dark:border-blue-700",
-  muted: "bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700",
+  success: "bg-green-100 dark:bg-green-900 border border-green-300 dark:border-green-700 shadow",
+  danger: "bg-red-100 dark:bg-red-900 border border-red-300 dark:border-red-700 shadow",
+  warning: "bg-yellow-100 dark:bg-yellow-900 border border-yellow-300 dark:border-yellow-700 shadow",
+  info: "bg-blue-100 dark:bg-blue-900 border border-blue-300 dark:border-blue-700 shadow",
+  muted: "bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 shadow",
 };
 
 const textVariantClasses: Record<Variant, string> = {

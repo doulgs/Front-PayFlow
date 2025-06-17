@@ -10,6 +10,7 @@ import { clsx } from "clsx";
 import { ChevronLeft } from "lucide-react-native";
 
 interface ActionsProps {
+  visible?: boolean;
   className?: string;
   action: () => void;
   icon: React.ReactNode;
@@ -97,11 +98,14 @@ export const Header: React.FC<HeaderProps> = ({
       </View>
 
       <View className="flex-row items-center gap-4 mr-1">
-        {actions.map((ac, i) => (
-          <TouchableOpacity key={i} onPress={ac.action} className={clsx("p-2", ac.className)}>
-            {ac.icon}
-          </TouchableOpacity>
-        ))}
+        {actions.map(
+          (ac, i) =>
+            (ac.visible ?? true) && (
+              <TouchableOpacity key={i} onPress={ac.action} className={clsx("p-2", ac.className)}>
+                {ac.icon}
+              </TouchableOpacity>
+            )
+        )}
       </View>
     </View>
   );
