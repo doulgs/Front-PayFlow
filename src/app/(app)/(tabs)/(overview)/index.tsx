@@ -1,8 +1,8 @@
-import React, { useRef, useState, useEffect } from "react";
-import { Text, View, Button } from "react-native";
-import dayjs from "dayjs";
 import { MonthSelectorCard, MonthSelectorRef } from "@/components/ui/month-selector";
-import { LatestTransactions } from "@/layouts/latest-transactions";
+import { ListTransactions } from "@/layouts/list-transaction";
+import dayjs from "dayjs";
+import React, { useRef, useState } from "react";
+import { View } from "react-native";
 
 export default function Index() {
   const monthSelectorRef = useRef<MonthSelectorRef>(null);
@@ -18,13 +18,13 @@ export default function Index() {
   };
 
   return (
-    <View className="flex-1 bg-light-background-secondary p-4 dark:bg-dark-background-alternative">
-      <View>
+    <View className="flex-1 gap-4 bg-light-background-secondary p-4 dark:bg-dark-background-alternative">
+      <View className="min-h-16">
         <MonthSelectorCard ref={monthSelectorRef} initialDate={new Date()} onChange={handleDateChange} />
       </View>
-      {/* <View>
-        <LatestTransactions data={[]} isLoading={false} />
-      </View> */}
+      <View className="flex-1">
+        <ListTransactions data={[]} isLoading={false} />
+      </View>
     </View>
   );
 }

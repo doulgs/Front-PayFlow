@@ -56,37 +56,30 @@ export const MonthSelectorCard = forwardRef<MonthSelectorRef, Props>(
     const nextMonth = currentDate.add(1, "month");
 
     return (
-      <Card className="flex-row items-center justify-between px-4 py-3 rounded-lg min-h-16">
-        {/* Botão anterior */}
-        <TouchableOpacity onPress={() => handleChangeMonth(-1)} className="mr-3">
-          <ChevronLeft size={22} color={iconColor} />
-        </TouchableOpacity>
+      <Card variant="outlined" className="flex-row items-center justify-between px-4 py-3 rounded-lg min-h-16">
+        <View className="flex-row items-center justify-center space-x-2 flex-1">
+          <TouchableOpacity onPress={() => handleChangeMonth(-1)} className="px-4">
+            <ChevronLeft size={22} color={iconColor} />
+          </TouchableOpacity>
 
-        {/* Mês anterior */}
-        <TouchableOpacity onPress={() => handleChangeMonth(-1)} className="flex-1 items-center">
-          <Text className="text-base text-light-typography-muted dark:text-dark-typography-muted mr-3">
+          <Text className="text-sm w-[80px] text-center text-light-typography-muted dark:text-dark-typography-muted">
             {formatDateTime(prevMonth.toDate(), "monthYear")}
           </Text>
-        </TouchableOpacity>
 
-        {/* Mês atual destacado */}
-        <View className="px-4 py-1 rounded-lg min-w-[90px] items-center bg-light-brand-primary/10 dark:bg-dark-brand-primary/10">
-          <Text className="text-base font-semibold text-light-brand-primary dark:text-dark-brand-primary">
-            {formatDateTime(currentDate.toDate(), "monthYear")}
-          </Text>
-        </View>
+          <View className="px-4 py-1 rounded-lg min-w-[90px] items-center bg-light-brand-primary/10 dark:bg-dark-brand-primary/10">
+            <Text className="text-base font-semibold text-light-brand-primary dark:text-dark-brand-primary">
+              {formatDateTime(currentDate.toDate(), "monthYear")}
+            </Text>
+          </View>
 
-        {/* Mês seguinte */}
-        <TouchableOpacity onPress={() => handleChangeMonth(1)} className="flex-1 items-center">
-          <Text className="text-base text-light-typography-muted dark:text-dark-typography-muted ml-3">
+          <Text className="text-sm w-[80px] text-center text-light-typography-muted dark:text-dark-typography-muted">
             {formatDateTime(nextMonth.toDate(), "monthYear")}
           </Text>
-        </TouchableOpacity>
 
-        {/* Botão próximo */}
-        <TouchableOpacity onPress={() => handleChangeMonth(1)} className="ml-3">
-          <ChevronRight size={22} color={iconColor} />
-        </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleChangeMonth(1)} className="px-4">
+            <ChevronRight size={22} color={iconColor} />
+          </TouchableOpacity>
+        </View>
       </Card>
     );
   }
