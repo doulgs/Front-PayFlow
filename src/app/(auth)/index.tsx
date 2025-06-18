@@ -13,11 +13,11 @@ import { Check, CornerUpLeft, Moon, Sun } from "lucide-react-native";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 type FormData = {
-  cpf: string;
+  email: string;
   password: string;
 };
 
-export default function Onboarding() {
+export default function Index() {
   const {
     control,
     handleSubmit,
@@ -31,81 +31,89 @@ export default function Onboarding() {
   const { toggleTheme, theme } = useThemeContext();
   const { currentLanguage, changeLanguage } = useChangeLanguage();
 
-  const [rememberCpf, setRememberCpf] = useState(false);
-  const [step, setStep] = useState<"cpf" | "success">("cpf");
+  const [rememberEmail, setRememberEmail] = useState(false);
+  const [step, setStep] = useState<"email" | "success">("email");
   const [loading, setLoading] = useState(false);
+  const [savedEmailValue, setSavedEmailValue] = useState<string>("");
 
   useEffect(() => {
-    AsyncStorage.getItem("savedCpf").then((cpf) => {
-      if (cpf) {
-        setValue("cpf", cpf);
-        setRememberCpf(true);
+    AsyncStorage.getItem("savedEmail").then((email) => {
+      if (email) {
+        setValue("email", email);
+        setRememberEmail(true);
+        setSavedEmailValue(email);
       }
     });
   }, []);
 
-  const handleCpfSubmit: SubmitHandler<FormData> = async (data) => {
-    if (rememberCpf) {
-      await AsyncStorage.setItem("savedCpf", data.cpf);
+  const handleEmailSubmit: SubmitHandler<FormData> = async (data) => {
+    if (rememberEmail) {
+      await AsyncStorage.setItem("savedEmail", data.email);
     } else {
-      await AsyncStorage.removeItem("savedCpf");
+      await AsyncStorage.removeItem("savedEmail");
     }
 
     setLoading(true);
     setTimeout(() => {
       setStep("success");
       setLoading(false);
+      setSavedEmailValue(data.email);
     }, 1500);
   };
 
   const handleLoginSubmit: SubmitHandler<FormData> = async (data) => {
     setLoading(true);
+
     try {
       to.app.tabs.dashboard.home();
-      console.log("Login bem-sucedido com CPF:", data.cpf, "e senha:", data.password);
-    } catch (err) {
-      console.error("Erro no login", err);
+    } catch (error: any) {
+      console.error(error);
+      alert("Sign in failed: " + error.message);
     } finally {
       setLoading(false);
     }
   };
 
   const handleBack = async () => {
-    await AsyncStorage.removeItem("savedCpf");
+    await AsyncStorage.removeItem("savedEmail");
     reset();
-    setStep("cpf");
+    setStep("email");
   };
 
-  const renderCpfStep = () => (
+  const renderEmailStep = () => (
     <View className="flex-1 bg-light-background-secondary dark:bg-dark-background-alternative rounded-t-2xl p-8">
-      <Text className="font-bold text-2xl text-black dark:text-white">{t("onboarding.cpf.title")}</Text>
+      <Text className="font-bold text-2xl text-black dark:text-white">{t("onboarding.email.title")}</Text>
 
       <View className="mt-8">
         <CustomInput
-          name="cpf"
-          label={t("onboarding.cpf.label")}
+          name="email"
+          label={t("onboarding.email.label")}
           control={control}
-          type="cpf"
+          type="mail"
           variant="flat"
-          placeholder={t("onboarding.cpf.placeholder")}
-          error={errors.cpf?.message}
+          placeholder={t("onboarding.email.placeholder")}
+          error={errors.email?.message}
         />
       </View>
 
-      <TouchableOpacity className="flex-row items-center gap-2 mt-20" onPress={() => setRememberCpf((prev) => !prev)}>
+      <TouchableOpacity className="flex-row items-center gap-2 mt-20" onPress={() => setRememberEmail((prev) => !prev)}>
         <View className="w-5 h-5 rounded border border-gray-400 items-center justify-center">
-          {rememberCpf && <Check size={16} color="#000" />}
+          {rememberEmail && <Check size={16} color="#000" />}
         </View>
-        <Text className="text-sm text-gray-700 dark:text-gray-300">{t("onboarding.cpf.remember")}</Text>
+        <Text className="text-sm text-gray-700 dark:text-gray-300">{t("onboarding.email.remember")}</Text>
       </TouchableOpacity>
 
       <View className="flex-1 items-center justify-center">
-        <Button title={t("onboarding.cpf.button")} onPress={handleSubmit(handleCpfSubmit)} className="rounded-3xl" />
+        <Button
+          title={t("onboarding.email.button")}
+          onPress={handleSubmit(handleEmailSubmit)}
+          className="rounded-3xl"
+        />
       </View>
 
       <View className="flex-1 max-h-24 flex-row items-center justify-between gap-8">
         <Button
-          title={theme === "dark" ? t("onboarding.cpf.themeToggle.dark") : t("onboarding.cpf.themeToggle.light")}
+          title={theme === "dark" ? t("onboarding.email.themeToggle.dark") : t("onboarding.email.themeToggle.light")}
           variant="ghost"
           onPress={toggleTheme}
           className="flex-1 bg-light-brand-primary/30 dark:bg-dark-brand-primary/50 rounded-3xl"
@@ -119,7 +127,7 @@ export default function Onboarding() {
         />
         <Button
           title={
-            currentLanguage === "pt" ? t("onboarding.cpf.languageToggle.pt") : t("onboarding.cpf.languageToggle.en")
+            currentLanguage === "pt" ? t("onboarding.email.languageToggle.pt") : t("onboarding.email.languageToggle.en")
           }
           variant="ghost"
           onPress={() => changeLanguage(currentLanguage === "pt" ? "en" : "pt")}
@@ -141,7 +149,7 @@ export default function Onboarding() {
           <Text numberOfLines={1} className="text-2xl font-bold dark:text-white">
             {t("onboarding.success.name")}
           </Text>
-          <Text className="text-lg text-gray-600 dark:text-gray-400">{t("onboarding.success.cpfMasked")}</Text>
+          <Text className="text-lg text-gray-600 dark:text-gray-400">{savedEmailValue}</Text>
         </View>
         <TouchableOpacity onPress={handleBack} className="p-2">
           <CornerUpLeft size={32} color={iconColor} />
@@ -172,7 +180,7 @@ export default function Onboarding() {
 
       <View className="flex-1 max-h-24 flex-row items-center justify-between gap-8">
         <Button
-          title={theme === "dark" ? t("onboarding.cpf.themeToggle.dark") : t("onboarding.cpf.themeToggle.light")}
+          title={theme === "dark" ? t("onboarding.email.themeToggle.dark") : t("onboarding.email.themeToggle.light")}
           variant="ghost"
           onPress={toggleTheme}
           className="flex-1 bg-light-brand-primary/30 dark:bg-dark-brand-primary/50 rounded-3xl"
@@ -186,7 +194,7 @@ export default function Onboarding() {
         />
         <Button
           title={
-            currentLanguage === "pt" ? t("onboarding.cpf.languageToggle.pt") : t("onboarding.cpf.languageToggle.en")
+            currentLanguage === "pt" ? t("onboarding.email.languageToggle.pt") : t("onboarding.email.languageToggle.en")
           }
           variant="ghost"
           onPress={() => changeLanguage(currentLanguage === "pt" ? "en" : "pt")}
@@ -208,8 +216,8 @@ export default function Onboarding() {
         <View className="flex-1 items-center justify-center bg-light-background-primary dark:bg-dark-background-primary rounded-t-2xl p-8">
           <ActivityIndicator size="large" color={palette.brand.primary} />
         </View>
-      ) : step === "cpf" ? (
-        renderCpfStep()
+      ) : step === "email" ? (
+        renderEmailStep()
       ) : (
         renderSuccessStep()
       )}
