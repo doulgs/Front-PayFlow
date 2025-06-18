@@ -1,3 +1,5 @@
+import ImageNoData from "@/assets/images/research-paper-amico.svg";
+import { Button } from "@/components/ui/buttons";
 import { Card } from "@/components/ui/cards";
 import { BottomSheetRef, useBottomSheet } from "@/hooks/useBottomSheet";
 import { useChangeLanguage } from "@/hooks/useChangeLanguage";
@@ -10,9 +12,6 @@ import { LayoutList, Trash2 } from "lucide-react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, TouchableOpacity, View } from "react-native";
 
-import ImageNoData from "@/assets/images/research-paper-amico.svg";
-import { Button } from "@/components/ui/buttons";
-
 const RECORD_DISPLAY_LIMIT = 7;
 
 type LatestTransactionsProps = {
@@ -20,7 +19,7 @@ type LatestTransactionsProps = {
   isLoading?: boolean;
 };
 
-const LatestTransactions: React.FC<LatestTransactionsProps> = ({ data, isLoading = false }) => {
+const ListTransactions: React.FC<LatestTransactionsProps> = ({ data, isLoading = false }) => {
   const { t } = useChangeLanguage();
   const { palette, iconColor } = useTheme();
   const { formatCurrency } = useCurrency();
@@ -57,7 +56,7 @@ const LatestTransactions: React.FC<LatestTransactionsProps> = ({ data, isLoading
             <Card.Text className="mt-2 text-sm text-muted">{t("finance.latest.loading")}</Card.Text>
           </Card.Body>
         ) : hasNoData ? (
-          <Card.Body className="items-center justify-center my-4">
+          <Card.Body className="flex-1 items-center justify-center min-h-[300px]">
             <ImageNoData width={200} height={200} />
             <Card.Footer className="mt-2">
               <Card.Text>{t("finance.latest.empty")}</Card.Text>
@@ -165,4 +164,4 @@ const LatestTransactions: React.FC<LatestTransactionsProps> = ({ data, isLoading
   );
 };
 
-export { LatestTransactions };
+export { ListTransactions };

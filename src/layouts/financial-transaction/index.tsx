@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 
 import { Card } from "@/components/ui/cards";
 import { useChangeLanguage } from "@/hooks/useChangeLanguage";
 import { useCurrency } from "@/hooks/useCurrency";
-import { useFormattedDate } from "@/hooks/useFormattedDate";
+import { useDate } from "@/hooks/useDate";
 import { useTheme } from "@/hooks/useTheme";
 import { useVisibilityStore } from "@/storages/useVisibilityStore";
 import { LatestTransactionProps } from "@/types/finance";
@@ -28,7 +28,7 @@ const FinancialTransaction: React.FC<Props> = ({ data, date }) => {
   const { t } = useChangeLanguage();
   const { currentTheme } = useTheme();
   const { formatCurrency } = useCurrency();
-  const { formatDate } = useFormattedDate();
+  const { formatDateTime } = useDate();
   const { isVisible, toggleVisibility } = useVisibilityStore();
 
   const [showDetails, setShowDetails] = useState(false);
@@ -42,19 +42,19 @@ const FinancialTransaction: React.FC<Props> = ({ data, date }) => {
     height: height.value,
   }));
 
+  useEffect(() => {
+    opacity.value = withTiming(showDetails ? 1 : 0, { duration: 300 });
+    height.value = withTiming(showDetails ? 100 : 0, { duration: 300 });
+  }, [showDetails]);
+
   const handleToggleDetails = () => {
-    setShowDetails((prev) => {
-      const expanding = !prev;
-      opacity.value = withTiming(expanding ? 1 : 0, { duration: 300 });
-      height.value = withTiming(expanding ? 100 : 0, { duration: 300 });
-      return expanding;
-    });
+    setShowDetails((prev) => !prev);
   };
 
   return (
     <>
       <View className="flex-row items-center justify-between px-1 pb-1">
-        <Card.Text className="text-sm">{formatDate(date.toISOString(), "month-year")}</Card.Text>
+        <Card.Text className="text-sm">{formatDateTime(date.toISOString(), "monthYear")}</Card.Text>
         <View className="flex-row items-center justify-center">
           <Card.Text className="text-sm" onPress={handleToggleDetails}>
             {t("finance.transaction.label.month")}

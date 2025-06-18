@@ -1,3 +1,6 @@
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
+
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/buttons";
 import { CustomInput } from "@/components/ui/inputs";
@@ -5,12 +8,9 @@ import { useTheme as useThemeContext } from "@/contexts/theme-context";
 import { useChangeLanguage } from "@/hooks/useChangeLanguage";
 import { useCustomNavigation } from "@/hooks/useCustomNavigation";
 import { useTheme } from "@/hooks/useTheme";
-import { colors } from "@/styles/colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Check, CornerUpLeft, Moon, Sun } from "lucide-react-native";
-import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
 
 type FormData = {
   cpf: string;
@@ -25,11 +25,11 @@ export default function Onboarding() {
     reset,
     formState: { errors },
   } = useForm<FormData>();
-  const { currentTheme } = useTheme();
-  const { toggleTheme, theme } = useThemeContext();
-  const { currentLanguage, changeLanguage } = useChangeLanguage();
   const { t } = useChangeLanguage();
   const { to } = useCustomNavigation();
+  const { iconColor, palette } = useTheme();
+  const { toggleTheme, theme } = useThemeContext();
+  const { currentLanguage, changeLanguage } = useChangeLanguage();
 
   const [rememberCpf, setRememberCpf] = useState(false);
   const [step, setStep] = useState<"cpf" | "success">("cpf");
@@ -144,10 +144,7 @@ export default function Onboarding() {
           <Text className="text-lg text-gray-600 dark:text-gray-400">{t("onboarding.success.cpfMasked")}</Text>
         </View>
         <TouchableOpacity onPress={handleBack} className="p-2">
-          <CornerUpLeft
-            size={32}
-            color={currentTheme === "dark" ? colors.light.typography.inverse : colors.dark.typography.inverse}
-          />
+          <CornerUpLeft size={32} color={iconColor} />
         </TouchableOpacity>
       </View>
 
@@ -209,7 +206,7 @@ export default function Onboarding() {
 
       {loading ? (
         <View className="flex-1 items-center justify-center bg-light-background-primary dark:bg-dark-background-primary rounded-t-2xl p-8">
-          <ActivityIndicator size="large" color={colors.light.brand.primary} />
+          <ActivityIndicator size="large" color={palette.brand.primary} />
         </View>
       ) : step === "cpf" ? (
         renderCpfStep()

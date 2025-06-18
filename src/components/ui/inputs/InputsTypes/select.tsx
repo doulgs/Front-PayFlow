@@ -1,9 +1,10 @@
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
+
+import { useTheme } from "@/hooks/useTheme";
 import { Ionicons } from "@expo/vector-icons";
 import { BottomSheetBackdrop, BottomSheetFlatList, BottomSheetModal } from "@gorhom/bottom-sheet";
 import { clsx } from "clsx";
-import React, { useCallback, useEffect, useMemo, useRef } from "react";
-import { Text, TouchableOpacity, View, useColorScheme } from "react-native";
-import { colors as tokens } from "@/styles/colors";
 import { Check } from "lucide-react-native";
 
 export type DropdownItem = {
@@ -33,8 +34,7 @@ export const SelectInput = ({
   onSelect,
   defaultValue,
 }: SelectProps) => {
-  const colorScheme = useColorScheme();
-  const theme = colorScheme === "dark" ? tokens.dark : tokens.light;
+  const { palette } = useTheme();
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const snapPoints = useMemo(() => ["40%", "60%", "80%", "95%"], []);
@@ -78,13 +78,13 @@ export const SelectInput = ({
         >
           <View className="flex-1 flex-row items-center">
             {item.icon && <View className="mr-2">{item.icon}</View>}
-            <Text style={{ color: theme.typography.primary, fontSize: 16 }}>{item.label}</Text>
+            <Text style={{ color: palette.typography.primary, fontSize: 16 }}>{item.label}</Text>
           </View>
-          {isSelected && <Check color={theme.brand.primary} />}
+          {isSelected && <Check color={palette.brand.primary} />}
         </TouchableOpacity>
       );
     },
-    [value, theme]
+    [value, palette]
   );
 
   const selectedLabel = options.find((o) => o.value === value)?.label || placeholder;
@@ -97,12 +97,12 @@ export const SelectInput = ({
           numberOfLines={1}
           ellipsizeMode="tail"
           style={{
-            color: value ? theme.typography.primary : theme.typography.muted,
+            color: value ? palette.typography.primary : palette.typography.muted,
           }}
         >
           {selectedLabel}
         </Text>
-        <Ionicons name="chevron-down" size={20} color={theme.typography.muted} />
+        <Ionicons name="chevron-down" size={20} color={palette.typography.muted} />
       </TouchableOpacity>
 
       <BottomSheetModal
@@ -112,13 +112,13 @@ export const SelectInput = ({
         backdropComponent={renderBackdrop}
         enableDismissOnClose
         backgroundStyle={{
-          backgroundColor: theme.background.alternative,
+          backgroundColor: palette.background.alternative,
           borderTopLeftRadius: 16,
           borderTopRightRadius: 16,
         }}
       >
         <View className="flex-row items-center justify-between px-4 py-3">
-          <Text className="font-bold text-xl" style={{ color: theme.typography.primary }}>
+          <Text className="font-bold text-xl" style={{ color: palette.typography.primary }}>
             {title}
           </Text>
         </View>

@@ -1,7 +1,8 @@
-import { FontAwesome5 } from "@expo/vector-icons";
-import { clsx } from "clsx";
 import React, { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
+
+import { clsx } from "clsx";
+import { AlertTriangle, CheckCircle, Info, X, XCircle } from "lucide-react-native";
 import Animated, { FadeInUp, FadeOutUp } from "react-native-reanimated";
 
 export interface ShowToastProps {
@@ -72,7 +73,14 @@ const ToastMessage = forwardRef<ToastHandle>((_, ref) => {
       entering={FadeInUp.duration(200)}
       exiting={FadeOutUp.duration(200)}
     >
-      <FontAwesome5 name={TOAST_STYLES[toastData.type].icon} size={30} color="#fff" />
+      {
+        {
+          success: <CheckCircle size={30} color="#fff" />,
+          danger: <XCircle size={30} color="#fff" />,
+          info: <Info size={30} color="#fff" />,
+          warning: <AlertTriangle size={30} color="#fff" />,
+        }[toastData.type]
+      }
 
       <View className="ml-4 flex-1">
         <Text className="text-light-typography-inverse dark:text-dark-typography-inverse font-bold text-lg">
@@ -101,7 +109,7 @@ const ToastMessage = forwardRef<ToastHandle>((_, ref) => {
       )}
 
       <TouchableOpacity className="ml-2" onPress={closeToast}>
-        <FontAwesome5 name="times" size={20} color="#fff" />
+        <X size={20} color="#fff" />
       </TouchableOpacity>
     </Animated.View>
   );

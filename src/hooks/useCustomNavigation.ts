@@ -23,6 +23,7 @@ export const useCustomNavigation = () => {
       stacks: {
         launcher: {
           home: () => router.push("/(app)/(stacks)/(launcher)"),
+          details: () => router.push("/(app)/(stacks)/(launcher)/details"),
         },
         notification: {
           home: () => router.push("/(app)/(stacks)/(notification)"),

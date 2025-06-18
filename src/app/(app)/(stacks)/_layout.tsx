@@ -16,6 +16,13 @@ export default function StackLayout() {
         }}
       />
       <Stack.Screen
+        name="(launcher)/details"
+        options={{
+          title: t("stack.launcher.title"),
+          header: (props) => <Header subTitle={t("stack.launcher.subtitle")} {...props} />,
+        }}
+      />
+      <Stack.Screen
         name="(notification)/index"
         options={{
           title: t("stack.notification.title"),
