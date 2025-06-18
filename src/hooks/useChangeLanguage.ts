@@ -1,5 +1,5 @@
+import { useLanguageContext } from "@/contexts/language-context";
 import { useCallback } from "react";
-import { useLanguageContext } from "../contexts/language-context";
 import { useTranslation } from "react-i18next";
 
 export const useChangeLanguage = () => {

@@ -4,7 +4,6 @@ import { ActivityIndicator, TouchableOpacity, View } from "react-native";
 import { Card } from "@/components/ui/cards";
 import { useChangeLanguage } from "@/hooks/useChangeLanguage";
 import { useTheme } from "@/hooks/useTheme";
-import { colors } from "@/styles/colors";
 import { LatestTransactionProps } from "@/types/finance";
 import { ChartPie } from "lucide-react-native";
 import { PieChart } from "react-native-gifted-charts";
@@ -18,15 +17,14 @@ interface Props {
 
 const FinancePieChart: React.FC<Props> = ({ data, isLoading = false }) => {
   const { t } = useChangeLanguage();
-  const { currentTheme } = useTheme();
+  const { currentTheme, iconColor, palette } = useTheme();
   const [focusedKey, setFocusedKey] = useState<string>("");
 
   const total = data.reduce((acc, cur) => acc + cur.value, 0);
   const hasNoData = data.length === 0 || data.every((item) => item.value === 0);
   const focusedItem = data.find((item) => item.key === focusedKey);
   const focusedPercentage = ((focusedItem?.value ?? 0) / total) * 100;
-  const iconColor = currentTheme === "dark" ? "white" : "black";
-  const bgColor = currentTheme === "dark" ? colors.dark.background.primary : colors.light.background.primary;
+  const bgColor = currentTheme === "dark" ? palette.background.primary : palette.background.primary;
 
   const pieData = data.map((item) => ({
     value: item.value,
@@ -48,7 +46,7 @@ const FinancePieChart: React.FC<Props> = ({ data, isLoading = false }) => {
 
       {isLoading ? (
         <Card.Body className="items-center justify-center my-6">
-          <ActivityIndicator size="large" color={colors.light.brand.primary} />
+          <ActivityIndicator size="large" color={palette.brand.primary} />
           <Card.Text className="mt-2 text-sm text-muted">{t("finance.pie-chart.loading")}</Card.Text>
         </Card.Body>
       ) : hasNoData ? (

@@ -2,7 +2,7 @@ import { Header } from "@/components/header";
 import { CustomTabBar } from "@/components/tab";
 import { useChangeLanguage } from "@/hooks/useChangeLanguage";
 import { Tabs } from "expo-router";
-import { Bell, HelpCircle } from "lucide-react-native";
+import { HelpCircle } from "lucide-react-native";
 import React from "react";
 
 export default function TabLayout() {
@@ -24,10 +24,6 @@ export default function TabLayout() {
                 {
                   action: () => {},
                   icon: <HelpCircle size={24} color="white" />,
-                },
-                {
-                  action: () => {},
-                  icon: <Bell size={24} color="white" />,
                 },
               ]}
               {...props}

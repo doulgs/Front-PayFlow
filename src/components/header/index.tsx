@@ -1,14 +1,16 @@
 import React from "react";
-import { clsx } from "clsx";
-import { Ionicons } from "@expo/vector-icons";
-import { Image, StatusBar, Text, TouchableOpacity, View, ViewStyle } from "react-native";
-import { useTheme } from "@/hooks/useTheme";
+import { Image, Pressable, StatusBar, Text, TouchableOpacity, View, ViewStyle } from "react-native";
 
-import GradientLinear from "../ui/overlays/gradient-linear";
-import { useGreeting } from "@/hooks/useGreeting";
+import { GradientLinear } from "@/components/ui/overlays/gradient-linear";
 import { useChangeLanguage } from "@/hooks/useChangeLanguage";
+import { useCustomNavigation } from "@/hooks/useCustomNavigation";
+import { useGreeting } from "@/hooks/useGreeting";
+import { useTheme } from "@/hooks/useTheme";
+import { clsx } from "clsx";
+import { ChevronLeft } from "lucide-react-native";
 
 interface ActionsProps {
+  visible?: boolean;
   className?: string;
   action: () => void;
   icon: React.ReactNode;
@@ -53,9 +55,10 @@ export const Header: React.FC<HeaderProps> = ({
   transparentBackground = false,
   gradientBackground = true,
 }) => {
+  const { iconColor } = useTheme();
   const { t } = useChangeLanguage();
   const { greeting } = useGreeting();
-  const { currentTheme } = useTheme();
+  const { to } = useCustomNavigation();
   const title = options.title || route.name;
 
   const canGoBack = !hideBackButton && navigation?.canGoBack?.();
@@ -67,21 +70,20 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   const textColorClass = "text-light-typography-inverse";
-  // const textColorClass = currentTheme === "dark" ? "text-dark-typography-inverse" : "text-light-typography-inverse";F
-
-  const iconColor = currentTheme === "dark" ? "#000000" : "#FFFFFF";
 
   const content = (
     <View className="flex-1 flex-row pr-2 pl-4 items-center justify-between">
       <View className="flex-row items-center gap-3">
         {canGoBack && (
           <TouchableOpacity onPress={() => navigation.goBack?.()} className="p-2">
-            <Ionicons name="chevron-back" size={24} color={iconColor} />
+            <ChevronLeft size={24} color={iconColor} />
           </TouchableOpacity>
         )}
 
         {showImageAvatar && imageAvatar && (
-          <Image source={{ uri: imageAvatar }} className="w-10 h-10 border border-stone-800 rounded-lg" />
+          <Pressable onPress={() => to.app.stacks.profile.home()}>
+            <Image source={{ uri: imageAvatar }} className="w-10 h-10 border border-stone-800 rounded-lg" />
+          </Pressable>
         )}
 
         <View>
@@ -96,11 +98,14 @@ export const Header: React.FC<HeaderProps> = ({
       </View>
 
       <View className="flex-row items-center gap-4 mr-1">
-        {actions.map((ac, i) => (
-          <TouchableOpacity key={i} onPress={ac.action} className={clsx("p-2", ac.className)}>
-            {ac.icon}
-          </TouchableOpacity>
-        ))}
+        {actions.map(
+          (ac, i) =>
+            (ac.visible ?? true) && (
+              <TouchableOpacity key={i} onPress={ac.action} className={clsx("p-2", ac.className)}>
+                {ac.icon}
+              </TouchableOpacity>
+            )
+        )}
       </View>
     </View>
   );
