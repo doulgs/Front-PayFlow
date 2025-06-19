@@ -1,9 +1,9 @@
 import "../i18n/config";
 import "../styles/global.css";
 
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState, ReactNode } from "react";
 
-import { Stack } from "expo-router";
+import { Stack, Redirect, Slot, useRouter } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { ActivityIndicator, View } from "react-native";
@@ -53,15 +53,11 @@ export default function MainLayout() {
     <SafeAreaProvider>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <StatusBar style="light" />
-
         <LanguageProvider>
           <ThemeProvider>
             <ToastProvider>
               <BottomSheetModalProvider>
-                <Stack screenOptions={{ headerShown: false }}>
-                  <Stack.Screen name="(auth)" />
-                  <Stack.Screen name="(app)" />
-                </Stack>
+                <Slot />
               </BottomSheetModalProvider>
             </ToastProvider>
           </ThemeProvider>
