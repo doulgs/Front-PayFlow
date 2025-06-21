@@ -1,6 +1,6 @@
 import { TransactionStatus, TransactionType } from "./enums";
 
-export interface TransactionOutputDTO {
+export interface TransactionDTO {
   id: string;
   user_id: string;
   type: TransactionType;

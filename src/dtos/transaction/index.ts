@@ -1,5 +1,5 @@
+import { TransactionDTO } from "./transaction-DTO";
 import { TransactionInputDTO } from "./transaction-input-DTO";
-import { TransactionOutputDTO } from "./transaction-output-DTO";
 import { TransactionSummaryDTO, TransactionSummaryResponse } from "./transaction-summary-DTO";
 
-export { TransactionInputDTO, TransactionOutputDTO, TransactionSummaryDTO, TransactionSummaryResponse };
+export { TransactionDTO, TransactionInputDTO, TransactionSummaryDTO, TransactionSummaryResponse };

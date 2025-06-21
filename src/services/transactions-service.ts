@@ -1,5 +1,5 @@
 import { ResponseDTO } from "@/dtos/shared";
-import { TransactionInputDTO, TransactionOutputDTO, TransactionSummaryDTO } from "@/dtos/transaction";
+import { TransactionInputDTO, TransactionDTO, TransactionSummaryDTO } from "@/dtos/transaction";
 import { supabase } from "@/lib/supabase";
 
 const TransactionsService = {
@@ -27,18 +27,18 @@ const TransactionsService = {
     return { isValid: true, msg: "Transaction deleted successfully", data: null };
   },
 
-  async getDetailsTransaction(id: string): Promise<ResponseDTO<TransactionOutputDTO>> {
+  async getDetailsTransaction(id: string): Promise<ResponseDTO<TransactionDTO>> {
     const { data, error } = await supabase.from("transactions").select("*").eq("id", id).single();
 
     if (error) return { isValid: false, msg: error.message, data: null };
-    return { isValid: true, msg: "Transaction details fetched successfully", data: data as TransactionOutputDTO };
+    return { isValid: true, msg: "Transaction details fetched successfully", data: data as TransactionDTO };
   },
 
   async getAllTransactions(
     user_id: string,
     page: number = 1,
     perPage: number = 13
-  ): Promise<ResponseDTO<TransactionOutputDTO[]>> {
+  ): Promise<ResponseDTO<TransactionDTO[]>> {
     const from = (page - 1) * perPage;
     const to = from + perPage - 1;
 
@@ -59,14 +59,14 @@ const TransactionsService = {
 
     if (error) return { isValid: false, msg: error.message, data: null };
 
-    return { isValid: true, msg: "Transactions fetched successfully", data: data as TransactionOutputDTO[] };
+    return { isValid: true, msg: "Transactions fetched successfully", data: data as TransactionDTO[] };
   },
 
   async getSummary(
     user_id: string,
     page: number = 1,
     perPage: number = 13
-  ): Promise<ResponseDTO<{ transactions: TransactionOutputDTO[]; summary: TransactionSummaryDTO }>> {
+  ): Promise<ResponseDTO<{ transactions: TransactionDTO[]; summary: TransactionSummaryDTO }>> {
     const from = (page - 1) * perPage;
     const to = from + perPage - 1;
 
@@ -95,7 +95,7 @@ const TransactionsService = {
       isValid: true,
       msg: "Summary fetched successfully",
       data: {
-        transactions: transactions as TransactionOutputDTO[],
+        transactions: transactions as TransactionDTO[],
         summary,
       },
     };
