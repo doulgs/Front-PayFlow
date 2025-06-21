@@ -2,12 +2,14 @@ import { Header } from "@/components/header";
 import { CustomTabBar } from "@/components/tab";
 import { useAuth } from "@/contexts/auth-provaider";
 import { useChangeLanguage } from "@/hooks/useChangeLanguage";
+import { useUserStore } from "@/storages/useUserStore";
 import { Tabs } from "expo-router";
 import { LogOut } from "lucide-react-native";
 import React from "react";
 
 export default function TabLayout() {
-  const { user, signOut } = useAuth();
+  const { signOut } = useAuth();
+  const { user } = useUserStore();
   const { t } = useChangeLanguage();
 
   return (
@@ -18,8 +20,8 @@ export default function TabLayout() {
           title: t("tabs.dashboard"),
           header: (props) => (
             <Header
-              subTitle={user?.user_metadata.name}
-              imageAvatar={user?.user_metadata.image}
+              subTitle={user?.name || ""}
+              imageAvatar={user?.image || ""}
               hideBackButton
               showImageAvatar
               actions={[

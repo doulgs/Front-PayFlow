@@ -1,4 +1,6 @@
-export interface RegisterDTO {
+import { UserRoleENUM, UserThemeENUM, UserLanguageENUM } from "./enums";
+
+export interface UserRegisterDTO {
   nickname: string;
   name: string;
   document: string;
@@ -8,8 +10,8 @@ export interface RegisterDTO {
   image: string;
   org_name: string;
   org_id: string;
-  user_type: "root" | "admin" | "manager" | "user" | "visitante";
+  user_type: UserRoleENUM;
   accepted_terms: boolean;
-  theme: "light" | "dark" | "system";
-  language: "en" | "pt" | string;
+  theme: UserThemeENUM;
+  language: UserLanguageENUM;
 }

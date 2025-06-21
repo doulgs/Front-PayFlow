@@ -6,17 +6,17 @@ import { Button } from "@/components/ui/buttons";
 import { CustomInput } from "@/components/ui/inputs";
 import { useAuth } from "@/contexts/auth-provaider";
 import { useTheme as useThemeContext } from "@/contexts/theme-context";
+import { useToast } from "@/contexts/toast-context";
+import { UserLoginDTO } from "@/dtos/user";
 import { useChangeLanguage } from "@/hooks/useChangeLanguage";
 import { useCustomNavigation } from "@/hooks/useCustomNavigation";
+import { useGreeting } from "@/hooks/useGreeting";
+import { useMask } from "@/hooks/useMaskDocument";
 import { useTheme } from "@/hooks/useTheme";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Check, CornerUpLeft, Moon, Sun } from "lucide-react-native";
+import { userService } from "@/services/user-service";
+import { useUserStore } from "@/storages/useUserStore";
+import { Check, Moon, Sun } from "lucide-react-native";
 import { SubmitHandler, useForm } from "react-hook-form";
-
-type FormData = {
-  email: string;
-  password: string;
-};
 
 export default function Index() {
   const {
@@ -24,60 +24,133 @@ export default function Index() {
     handleSubmit,
     setValue,
     reset,
-    formState: { errors },
-  } = useForm<FormData>();
+    formState: { errors, isSubmitted },
+  } = useForm<UserLoginDTO>({ mode: "onSubmit" });
   const { t } = useChangeLanguage();
+  const { greeting } = useGreeting();
   const { router, to } = useCustomNavigation();
-  const { iconColor, palette } = useTheme();
+  const { palette } = useTheme();
   const { toggleTheme, theme } = useThemeContext();
   const { currentLanguage, changeLanguage } = useChangeLanguage();
+  const { maskCpf } = useMask();
+  const { showToast } = useToast();
   const { signIn, loading: loadinAuth } = useAuth();
-  const [rememberEmail, setRememberEmail] = useState(false);
+  const [keepLoggedIn, setKeepLoggedIn] = useState(false);
+  const [loadingUser, setLoadingUser] = useState(false);
   const [step, setStep] = useState<"email" | "success">("email");
-  const [loading, setLoading] = useState(false);
-  const [savedEmailValue, setSavedEmailValue] = useState<string>("");
+  const { userId, setUserId, user, setUser } = useUserStore();
 
   useEffect(() => {
-    AsyncStorage.getItem("savedEmail").then((email) => {
-      if (email) {
-        setValue("email", email);
-        setRememberEmail(true);
-        setSavedEmailValue(email);
-      }
-    });
-  }, []);
-
-  const handleEmailSubmit: SubmitHandler<FormData> = async (data) => {
-    if (rememberEmail) {
-      await AsyncStorage.setItem("savedEmail", data.email);
-    } else {
-      await AsyncStorage.removeItem("savedEmail");
+    let isMounted = true;
+    if (userId) {
+      (async () => {
+        setLoadingUser(true);
+        const userData = await userService.getUser(userId);
+        if (isMounted && userData.isValid && userData.data) {
+          const userInfo = userData.data;
+          setValue("email", userInfo.email);
+          setStep("success");
+          setUser(userInfo);
+        }
+        setLoadingUser(false);
+      })();
     }
+    return () => {
+      isMounted = false;
+    };
+  }, [userId]);
 
-    setLoading(true);
-    setTimeout(() => {
+  const handleEmailSubmit: SubmitHandler<UserLoginDTO> = async (data) => {
+    if (!data.email || data.email.trim() === "") {
+      showToast({
+        type: "warning",
+        text: "Email obrigatório",
+        description: "Por favor, insira seu email.",
+        position: "bottom",
+      });
+      return;
+    }
+    setLoadingUser(true);
+    try {
+      const userData = await userService.getUserByEmail(data.email);
+      if (!userData.isValid || userData.data === null) {
+        showToast({
+          type: "warning",
+          text: "Usuário não encontrado",
+          description: "Ocorreu um erro ao verificar o email. Por favor, tente novamente.",
+          position: "bottom",
+        });
+        reset();
+        return;
+      }
+
+      const userInfo = userData.data;
+      setValue("email", userInfo.email);
+      setUserId(userInfo.id);
+      setUser(userInfo);
       setStep("success");
-      setLoading(false);
-      setSavedEmailValue(data.email);
-    }, 1500);
+    } catch (error) {
+      console.error("Erro ao buscar usuário por email:", error);
+      showToast({
+        type: "warning",
+        text: "Erro ao verificar email",
+        description: "Ocorreu um erro ao verificar o email. Por favor, tente novamente.",
+      });
+    } finally {
+      setLoadingUser(false);
+    }
   };
 
-  const handleLoginSubmit: SubmitHandler<FormData> = async (data) => {
+  const handleLoginSubmit: SubmitHandler<UserLoginDTO> = async (data) => {
+    if (!data.password || data.password.trim() === "") {
+      showToast({
+        type: "warning",
+        text: "Senha obrigatória",
+        description: "Por favor, insira sua senha.",
+        position: "bottom",
+      });
+      return;
+    }
+
+    setLoadingUser(true);
+
     try {
-      const result = await signIn(data.email, data.password);
-      if (result.success) {
+      const { isValid, msg, data: result } = await signIn(data);
+
+      if (keepLoggedIn && result) {
+        setUserId(result.id);
+      }
+
+      if (isValid && result) {
+        const userData = await userService.getUser(result.id);
+
+        if (!userData.isValid || userData.data === null) {
+          reset();
+          setStep("email");
+          return;
+        }
+        const userInfo = userData.data;
+        if (keepLoggedIn) {
+          setUserId(userInfo.id);
+        }
+        setUser(userInfo);
         router.replace("/(app)/(tabs)/(dashboard)");
       } else {
-        console.log(result.error.message);
+        reset();
+        setStep("email");
+        console.error(msg);
       }
-    } catch (error: any) {
-      console.error(error);
+    } catch (error) {
+      setLoadingUser(false);
+      console.error("Login error:", error);
+      reset();
+      setStep("email");
     }
   };
 
-  const handleBack = async () => {
-    await AsyncStorage.removeItem("savedEmail");
+  const handleBack = () => {
     reset();
+    setUserId(null);
     setStep("email");
   };
 
@@ -97,28 +170,39 @@ export default function Index() {
           type="mail"
           variant="flat"
           placeholder={t("onboarding.email.placeholder")}
-          error={errors.email?.message}
+          rules={{
+            required: "Email obrigatório",
+            pattern: {
+              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+              message: "Email inválido",
+            },
+          }}
+          error={isSubmitted ? errors.email?.message : undefined}
         />
       </View>
 
-      <TouchableOpacity className="flex-row items-center gap-2 mt-20" onPress={() => setRememberEmail((prev) => !prev)}>
+      <TouchableOpacity className="flex-row items-center gap-2 mt-20" onPress={() => setKeepLoggedIn((prev) => !prev)}>
         <View className="w-5 h-5 rounded border border-gray-400 items-center justify-center">
-          {rememberEmail && <Check size={16} color="#000" />}
+          {keepLoggedIn && <Check size={16} color="#000" />}
         </View>
-        <Text className="text-sm text-gray-700 dark:text-gray-300">{t("onboarding.email.remember")}</Text>
+        <Text className="text-sm text-gray-700 dark:text-gray-300">{t("onboarding.remember")}</Text>
       </TouchableOpacity>
 
-      <View className="flex-1 items-center justify-center">
+      <View className="flex-1 items-center gap-8 justify-center">
         <Button
           title={t("onboarding.email.button")}
           onPress={handleSubmit(handleEmailSubmit)}
           className="rounded-3xl"
+          loading={isLoading}
+          disabled={isLoading}
         />
         <Button
           variant="ghost"
           title={t("onboarding.register.button")}
-          onPress={handleSubmit(handleNavigetionRegister)}
+          onPress={handleNavigetionRegister}
           className="rounded-3xl"
+          loading={isLoading}
+          disabled={isLoading}
         />
       </View>
 
@@ -152,19 +236,15 @@ export default function Index() {
   const renderSuccessStep = () => (
     <View className="flex-1 bg-light-background-secondary dark:bg-dark-background-alternative rounded-t-2xl p-8">
       <View className="flex-row items-center gap-4 mb-8">
-        <Avatar size={75} name="Douglas Souza" />
+        <Avatar size={75} imageUrl={user?.image || ""} name={user?.name || ""} />
         <View className="flex-1 bg-light-background-secondary dark:bg-dark-background-alternative">
-          <Text className="text-xl font-extrabold text-gray-800 dark:text-white">
-            {t("onboarding.success.greeting")}
-          </Text>
+          <Text className="text-md font-extrabold text-gray-800 dark:text-white">{greeting}</Text>
           <Text numberOfLines={1} className="text-2xl font-bold dark:text-white">
-            {t("onboarding.success.name")}
+            {user?.name}
           </Text>
-          <Text className="text-lg text-gray-600 dark:text-gray-400">{savedEmailValue}</Text>
+          <Text className="text-md text-gray-600 dark:text-gray-400">{user?.email}</Text>
+          <Text className="text-md text-gray-600 dark:text-gray-400">{maskCpf(user?.document)}</Text>
         </View>
-        <TouchableOpacity onPress={handleBack} className="p-2">
-          <CornerUpLeft size={32} color={iconColor} />
-        </TouchableOpacity>
       </View>
 
       <Text className="font-bold text-xl text-black dark:text-white">{t("onboarding.success.passwordTitle")}</Text>
@@ -181,11 +261,21 @@ export default function Index() {
         />
       </View>
 
-      <View className="flex-1 items-center justify-center">
+      <View className="flex-1 items-center gap-8 justify-center">
         <Button
           title={t("onboarding.success.button")}
           onPress={handleSubmit(handleLoginSubmit)}
           className="rounded-3xl"
+          loading={isLoading}
+          disabled={isLoading}
+        />
+        <Button
+          title={t("onboarding.email.edit")}
+          onPress={handleBack}
+          className="rounded-3xl"
+          loading={isLoading}
+          disabled={isLoading}
+          variant="ghost"
         />
       </View>
 
@@ -216,6 +306,8 @@ export default function Index() {
     </View>
   );
 
+  const isLoading = loadinAuth || loadingUser;
+
   return (
     <View className="flex-1 bg-light-brand-primary dark:bg-dark-brand-primary">
       <View className="items-center justify-center mt-20 gap-2 py-2">
@@ -223,7 +315,7 @@ export default function Index() {
         <Text className="font-medium text-white">{t("onboarding.header.version")}</Text>
       </View>
 
-      {loading || loadinAuth ? (
+      {isLoading ? (
         <View className="flex-1 items-center justify-center bg-light-background-primary dark:bg-dark-background-primary rounded-t-2xl p-8">
           <ActivityIndicator size="large" color={palette.brand.primary} />
         </View>

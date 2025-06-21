@@ -1,19 +1,30 @@
-import { UserAuthDto } from "@/dtos/user/user-auth-dto";
-import { AuthTokensDto } from "@/dtos/user/users-tokens-dto";
+import { UserDTO } from "@/dtos/user";
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createJSONStorage } from "zustand/middleware";
 
 interface UserStore {
-  user: UserAuthDto | null;
-  tokens: AuthTokensDto | null;
-  setUser: (user: UserAuthDto) => void;
-  setTokens: (tokens: AuthTokensDto) => void;
+  user: UserDTO | null;
+  userId: string | null;
+  setUser: (user: UserDTO) => void;
+  setUserId: (id: string | null) => void;
   clear: () => void;
 }
 
-export const useUserStore = create<UserStore>((set) => ({
-  user: null,
-  tokens: null,
-  setUser: (user) => set({ user }),
-  setTokens: (tokens) => set({ tokens }),
-  clear: () => set({ user: null, tokens: null }),
-}));
+export const useUserStore = create<UserStore>()(
+  persist(
+    (set) => ({
+      user: null,
+      userId: null,
+      setUser: (user) => set({ user, userId: user.id }),
+      setUserId: (id) => set({ userId: id }),
+      clear: () => set({ user: null, userId: null }),
+    }),
+    {
+      name: "user-id",
+      storage: createJSONStorage(() => AsyncStorage),
+      partialize: (state) => ({ userId: state.userId }),
+    }
+  )
+);

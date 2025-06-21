@@ -17,12 +17,14 @@ import { PasswordInput } from "@/components/ui/inputs/InputsTypes/password";
 import { TextInputField } from "@/components/ui/inputs/InputsTypes/text";
 import { useTheme } from "@/hooks/useTheme";
 import { CircleX } from "lucide-react-native";
+import { PhoneInput } from "./InputsTypes/phone";
 import { SelectInput } from "./InputsTypes/select";
 
 const inputTypeComponents = {
   text: TextInputField,
   password: PasswordInput,
   mail: EmailInput,
+  phone: PhoneInput,
   cpf: CPFInput,
   cnpj: CNPJInput,
   number: NumberInput,

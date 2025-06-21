@@ -4,36 +4,52 @@ import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View } from "rea
 import { Button } from "@/components/ui/buttons";
 import { CustomInput } from "@/components/ui/inputs";
 import { useAuth } from "@/contexts/auth-provaider";
+import { useToast } from "@/contexts/toast-context";
+import { UserRegisterDTO } from "@/dtos/user";
 import { useChangeLanguage } from "@/hooks/useChangeLanguage";
 import { useCustomNavigation } from "@/hooks/useCustomNavigation";
 import { useTheme } from "@/hooks/useTheme";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { RegisterDTO } from "@/dtos/user/user-register-dto";
 
 export default function SignUp() {
   const {
     watch,
     control,
     handleSubmit,
-    formState: { errors },
-  } = useForm<RegisterDTO>({
+    formState: { errors, isSubmitted, touchedFields },
+  } = useForm<UserRegisterDTO>({
     defaultValues: {
       accepted_terms: false,
     },
+    mode: "onSubmit",
   });
   const { t } = useChangeLanguage();
   const { router } = useCustomNavigation();
   const { palette } = useTheme();
   const { signUp, loading } = useAuth();
+  const { showToast } = useToast();
 
-  const onSubmit: SubmitHandler<RegisterDTO> = async (data) => {
+  const onSubmit: SubmitHandler<UserRegisterDTO> = async (data) => {
     const cleanedData = Object.fromEntries(
       Object.entries(data).map(([key, value]) => [key, typeof value === "string" ? value.trimEnd() : value])
-    ) as RegisterDTO;
+    ) as UserRegisterDTO;
 
-    const result = await signUp(cleanedData);
-    if (!result?.error) {
-      router.replace("/(app)/(tabs)/(dashboard)");
+    const { isValid } = await signUp(cleanedData);
+    if (isValid) {
+      showToast({
+        type: "success",
+        text: "Cadastro realizado com sucesso!",
+        description: "Acessse sua conta agora.",
+        position: "bottom",
+      });
+      router.replace("/(auth)");
+    } else {
+      showToast({
+        type: "warning",
+        text: "Erro ao cadastrar",
+        description: "Verifique os dados informados e tente novamente.",
+        position: "bottom",
+      });
     }
   };
 
@@ -59,7 +75,8 @@ export default function SignUp() {
               type="text"
               variant="flat"
               placeholder={t("nickname.placeholder")}
-              error={errors.nickname?.message}
+              rules={{ required: "Apelido obrigatório" }}
+              error={isSubmitted || touchedFields.nickname ? errors.nickname?.message : undefined}
             />
             <CustomInput
               name="name"
@@ -68,7 +85,8 @@ export default function SignUp() {
               type="text"
               variant="flat"
               placeholder={t("name.placeholder")}
-              error={errors.name?.message}
+              rules={{ required: "Nome obrigatório" }}
+              error={isSubmitted || touchedFields.name ? errors.name?.message : undefined}
             />
             <CustomInput
               name="document"
@@ -77,7 +95,14 @@ export default function SignUp() {
               type="cpf"
               variant="flat"
               placeholder={t("cpf.placeholder")}
-              error={errors.document?.message}
+              rules={{
+                required: "CPF obrigatório",
+                pattern: {
+                  value: /^\d{3}\.\d{3}\.\d{3}-\d{2}$/,
+                  message: "CPF inválido",
+                },
+              }}
+              error={isSubmitted || touchedFields.document ? errors.document?.message : undefined}
             />
 
             <CustomInput
@@ -87,7 +112,14 @@ export default function SignUp() {
               type="mail"
               variant="flat"
               placeholder={t("email.placeholder")}
-              error={errors.email?.message}
+              rules={{
+                required: "Email obrigatório",
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: "Email inválido",
+                },
+              }}
+              error={isSubmitted || touchedFields.email ? errors.email?.message : undefined}
             />
 
             <CustomInput
@@ -97,17 +129,35 @@ export default function SignUp() {
               type="password"
               variant="flat"
               placeholder={t("password.placeholder")}
-              error={errors.password?.message}
+              rules={{
+                required: "Senha obrigatória",
+                minLength: {
+                  value: 8,
+                  message: "Senha deve ter pelo menos 8 caracteres",
+                },
+                pattern: {
+                  value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/,
+                  message: "Senha deve incluir letra, número e caractere especial",
+                },
+              }}
+              error={isSubmitted || touchedFields.password ? errors.password?.message : undefined}
             />
 
             <CustomInput
               name="phone"
               label={t("phone.label")}
               control={control}
-              type="number"
+              type="phone"
               variant="flat"
               placeholder={t("phone.placeholder")}
-              error={errors.phone?.message}
+              rules={{
+                required: "Telefone obrigatório",
+                pattern: {
+                  value: /^\(\d{2}\)\d{5}-\d{4}$/,
+                  message: "Telefone inválido",
+                },
+              }}
+              error={isSubmitted || touchedFields.phone ? errors.phone?.message : undefined}
             />
 
             <Controller
@@ -130,11 +180,13 @@ export default function SignUp() {
 
             <View className="flex-1 items-center justify-center mt-5">
               <Button
-                title={t("button")}
+                title={loading ? "" : t("button")}
                 onPress={handleSubmit(onSubmit)}
-                className="rounded-3xl"
-                disabled={!watch("accepted_terms")}
-              />
+                className="rounded-3xl flex-row justify-center items-center"
+                disabled={!watch("accepted_terms") || loading}
+              >
+                {loading && <ActivityIndicator color="#fff" />}
+              </Button>
             </View>
           </ScrollView>
         </View>
