@@ -93,7 +93,10 @@ const CustomInput = <T extends FieldValues = FieldValues>({
             <View className={clsx(baseStyles, variants[variant], wrapperClass)}>
               {leftIcon && <View className="mr-2">{leftIcon}</View>}
               <InputComponent
-                onChange={onChange}
+                onChange={(value) => {
+                  const trimmed = typeof value === "string" ? value.trimEnd() : value;
+                  onChange(trimmed);
+                }}
                 onBlur={onBlur}
                 value={value}
                 clear={() => onChange(type === "multiSelect" ? [] : "")}
