@@ -11,6 +11,8 @@ type AvatarProps = {
 };
 
 export const Avatar: React.FC<AvatarProps> = ({ imageUrl, imageLocal, name, size = 48, className }) => {
+  if (imageUrl === "not found") imageUrl = "";
+
   const initials = name
     ? name
         .split(" ")
@@ -20,7 +22,7 @@ export const Avatar: React.FC<AvatarProps> = ({ imageUrl, imageLocal, name, size
         .toUpperCase()
     : "👤";
 
-  const imageSource = imageLocal ? imageLocal : imageUrl ? { uri: imageUrl } : null;
+  const imageSource = imageLocal ? imageLocal : imageUrl && imageUrl.trim().length > 0 ? { uri: imageUrl } : null;
 
   const containerStyle = {
     width: size,
@@ -44,9 +46,9 @@ export const Avatar: React.FC<AvatarProps> = ({ imageUrl, imageLocal, name, size
           source={imageSource}
           resizeMode="cover"
           style={{
-            width: size,
-            height: size,
-            borderRadius: size / 2,
+            width: "100%",
+            height: "100%",
+            borderRadius: 0,
           }}
         />
       ) : (

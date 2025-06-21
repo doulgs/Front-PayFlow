@@ -5,7 +5,8 @@ export const useCustomNavigation = () => {
 
   const to = {
     auth: {
-      login: () => router.push("/(auth)/(onboarding)"),
+      login: () => router.push("/(auth)"),
+      register: () => router.push("/(auth)/register"),
     },
 
     app: {
