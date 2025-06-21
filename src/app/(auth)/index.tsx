@@ -4,6 +4,7 @@ import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/buttons";
 import { CustomInput } from "@/components/ui/inputs";
+import { useAuth } from "@/contexts/auth-provaider";
 import { useTheme as useThemeContext } from "@/contexts/theme-context";
 import { useChangeLanguage } from "@/hooks/useChangeLanguage";
 import { useCustomNavigation } from "@/hooks/useCustomNavigation";
@@ -26,11 +27,11 @@ export default function Index() {
     formState: { errors },
   } = useForm<FormData>();
   const { t } = useChangeLanguage();
-  const { to } = useCustomNavigation();
+  const { router, to } = useCustomNavigation();
   const { iconColor, palette } = useTheme();
   const { toggleTheme, theme } = useThemeContext();
   const { currentLanguage, changeLanguage } = useChangeLanguage();
-
+  const { signIn, loading: loadinAuth } = useAuth();
   const [rememberEmail, setRememberEmail] = useState(false);
   const [step, setStep] = useState<"email" | "success">("email");
   const [loading, setLoading] = useState(false);
@@ -62,15 +63,15 @@ export default function Index() {
   };
 
   const handleLoginSubmit: SubmitHandler<FormData> = async (data) => {
-    setLoading(true);
-
     try {
-      to.app.tabs.dashboard.home();
+      const result = await signIn(data.email, data.password);
+      if (result.success) {
+        router.replace("/(app)/(tabs)/(dashboard)");
+      } else {
+        console.log(result.error.message);
+      }
     } catch (error: any) {
       console.error(error);
-      alert("Sign in failed: " + error.message);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -78,6 +79,10 @@ export default function Index() {
     await AsyncStorage.removeItem("savedEmail");
     reset();
     setStep("email");
+  };
+
+  const handleNavigetionRegister = async () => {
+    to.auth.register();
   };
 
   const renderEmailStep = () => (
@@ -107,6 +112,12 @@ export default function Index() {
         <Button
           title={t("onboarding.email.button")}
           onPress={handleSubmit(handleEmailSubmit)}
+          className="rounded-3xl"
+        />
+        <Button
+          variant="ghost"
+          title={t("onboarding.register.button")}
+          onPress={handleSubmit(handleNavigetionRegister)}
           className="rounded-3xl"
         />
       </View>
@@ -212,7 +223,7 @@ export default function Index() {
         <Text className="font-medium text-white">{t("onboarding.header.version")}</Text>
       </View>
 
-      {loading ? (
+      {loading || loadinAuth ? (
         <View className="flex-1 items-center justify-center bg-light-background-primary dark:bg-dark-background-primary rounded-t-2xl p-8">
           <ActivityIndicator size="large" color={palette.brand.primary} />
         </View>
