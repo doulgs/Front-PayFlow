@@ -76,7 +76,7 @@ export const Header: React.FC<HeaderProps> = ({
       <View className="flex-row items-center gap-3">
         {canGoBack && (
           <TouchableOpacity onPress={() => navigation.goBack?.()} className="p-2">
-            <ChevronLeft size={24} color={iconColor} />
+            <ChevronLeft size={24} color={"#FFF"} />
           </TouchableOpacity>
         )}
 

@@ -7,7 +7,6 @@ import { useCurrency } from "@/hooks/useCurrency";
 import { useDate } from "@/hooks/useDate";
 import { useTheme } from "@/hooks/useTheme";
 import { useVisibilityStore } from "@/storages/useVisibilityStore";
-import { LatestTransactionProps } from "@/types/finance";
 import {
   ArrowDownNarrowWide,
   ArrowUpNarrowWide,
@@ -18,10 +17,11 @@ import {
   Landmark,
 } from "lucide-react-native";
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import { TransactionSummaryDTO } from "@/dtos/transaction";
 
 interface Props {
   date: Date;
-  data: LatestTransactionProps[];
+  data: TransactionSummaryDTO | null;
 }
 
 const FinancialTransaction: React.FC<Props> = ({ data, date }) => {
@@ -51,6 +51,16 @@ const FinancialTransaction: React.FC<Props> = ({ data, date }) => {
     setShowDetails((prev) => !prev);
   };
 
+  if (!data) {
+    return (
+      <Card variant="outlined" className="mb-4">
+        <Card.Body>
+          <Card.Text className="text-center text-sm">Dados indisponiveis</Card.Text>
+        </Card.Body>
+      </Card>
+    );
+  }
+
   return (
     <>
       <View className="flex-row items-center justify-between px-1 pb-1">
@@ -76,7 +86,7 @@ const FinancialTransaction: React.FC<Props> = ({ data, date }) => {
                 {t("finance.transaction.label.available")}
               </Card.Text>
               <Card.Text className="font-bold text-xl">
-                {isVisible ? "*******" : formatCurrency(data[0].value - data[1].value)}
+                {isVisible ? "*******" : formatCurrency(data.available_balance)}
               </Card.Text>
             </View>
             <View className="flex-row gap-2 items-center">
@@ -99,7 +109,7 @@ const FinancialTransaction: React.FC<Props> = ({ data, date }) => {
                 {t("finance.transaction.label.income")}
               </Card.Text>
               <Card.Text className="font-bold text-xl">
-                {isVisible ? "*******" : formatCurrency(data[0].value)}
+                {isVisible ? "*******" : formatCurrency(data.total_income)}
               </Card.Text>
             </View>
           </Card.Body>
@@ -112,10 +122,10 @@ const FinancialTransaction: React.FC<Props> = ({ data, date }) => {
             </Card.Icon>
             <View>
               <Card.Text variant="ghost" className="font-semibold text-sm">
-                {t("finance.transaction.label.outcome")}
+                {t("finance.transaction.label.expense")}
               </Card.Text>
               <Card.Text className="font-bold text-xl">
-                {isVisible ? "*******" : formatCurrency(data[1].value)}
+                {isVisible ? "*******" : formatCurrency(data.total_expense)}
               </Card.Text>
             </View>
           </Card.Body>
@@ -134,7 +144,7 @@ const FinancialTransaction: React.FC<Props> = ({ data, date }) => {
                   {t("finance.transaction.label.to-receive")}
                 </Card.Text>
                 <Card.Text className="font-bold text-xl">
-                  {isVisible ? "*******" : formatCurrency(data[2].value)}
+                  {isVisible ? "*******" : formatCurrency(data.total_to_receive)}
                 </Card.Text>
               </View>
             </Card.Body>
@@ -150,7 +160,7 @@ const FinancialTransaction: React.FC<Props> = ({ data, date }) => {
                   {t("finance.transaction.label.to-pay")}
                 </Card.Text>
                 <Card.Text className="font-bold text-xl">
-                  {isVisible ? "*******" : formatCurrency(data[3].value)}
+                  {isVisible ? "*******" : formatCurrency(data.total_to_pay)}
                 </Card.Text>
               </View>
             </Card.Body>

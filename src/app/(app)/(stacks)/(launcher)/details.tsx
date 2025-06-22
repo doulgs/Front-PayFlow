@@ -1,46 +1,143 @@
 import React from "react";
-import { KeyboardAvoidingView, Platform, ScrollView, Text, View } from "react-native";
+import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, Text, View } from "react-native";
 
 import { Button } from "@/components/ui/buttons";
 import { CustomInput } from "@/components/ui/inputs";
 import { MultiOptionsButton } from "@/components/ui/multi-options-button";
+import { useToast } from "@/contexts/toast-context";
+import { TransactionInputDTO } from "@/dtos/transaction";
 import { useCurrency } from "@/hooks/useCurrency";
+import { useCustomNavigation } from "@/hooks/useCustomNavigation";
 import { useTheme } from "@/hooks/useTheme";
+import { transactionService } from "@/services/transactions-service";
+import { useTransactionStore } from "@/storages/useFinanceTransactionStore";
+import { useUserStore } from "@/storages/useUserStore";
 import { AlignLeft, CalendarDays, DollarSign, FileDigit, LetterText } from "lucide-react-native";
+import { DateTime } from "luxon";
 import { Controller, useForm } from "react-hook-form";
 
-interface FormData {
-  type: "Entrada" | "Saida" | "Outros";
-  status: "Pendente" | "Finalizado";
-  code: string;
-  title: string;
-  description: string;
-  notes: string;
-  value: string;
-  dueDate: string;
-}
-
 const Details = () => {
+  const { palette } = useTheme();
+  const { showToast } = useToast();
   const { iconColor } = useTheme();
+  const { userId } = useUserStore();
+  const { data } = useTransactionStore();
   const { formatCurrency } = useCurrency();
+  const { router } = useCustomNavigation();
+
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const {
     control,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm<TransactionInputDTO>({
     defaultValues: {
-      type: "Entrada",
-      status: "Pendente",
+      type: data.type,
+      status: "pending",
       code: "",
       title: "",
       description: "",
       notes: "",
-      value: formatCurrency(Number(0)),
-      dueDate: new Date().toISOString().substring(0, 10),
+      value: formatCurrency(data.value || 0),
+      due_date: new Date().toISOString().substring(0, 10),
     },
   });
+
+  React.useEffect(() => {
+    if (data.value !== undefined) {
+      setValue("value", formatCurrency(data.value));
+    }
+  }, [data.value]);
+
+  const onSubmit = async (formData: TransactionInputDTO) => {
+    const numericValue = Number(
+      String(formData.value)
+        .replace(/[^0-9,-]+/g, "")
+        .replace(",", ".")
+    );
+
+    if (!userId) {
+      console.error("Usuário não encontrado!");
+      return;
+    }
+
+    if (!data.type) {
+      console.error("Tipo da transação não definido!");
+      return;
+    }
+
+    if (isNaN(numericValue)) {
+      console.error("Valor inválido:", formData.value);
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+
+      const now = DateTime.now().setZone("America/Sao_Paulo");
+
+      const dateWithCurrentTime = DateTime.fromISO(formData.due_date, {
+        zone: "America/Sao_Paulo",
+      })
+        .set({
+          hour: now.hour,
+          minute: now.minute,
+          second: now.second,
+          millisecond: now.millisecond,
+        })
+        .toISO();
+
+      const result = await transactionService.newTransaction(
+        {
+          ...formData,
+          value: numericValue as unknown as string,
+          type: data.type,
+          due_date: dateWithCurrentTime || "",
+        },
+        userId
+      );
+
+      if (!result.isValid) {
+        showToast({
+          type: "warning",
+          text: "Erro ao criar transação",
+          description: `Erro. ${result.msg}`,
+          position: "bottom",
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      reset();
+      showToast({
+        type: "success",
+        text: "Transação criada",
+        description: "A transação foi criada com sucesso.",
+        position: "bottom",
+      });
+      router.replace("/(app)/(tabs)/(dashboard)");
+    } catch (error) {
+      showToast({
+        type: "warning",
+        text: "Erro ao criar transação",
+        description: `Ocorreu um erro ao criar a transação. ${error}`,
+        position: "bottom",
+      });
+      console.error("Error creating transaction:", error);
+      setIsLoading(false);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <View className="flex-1 items-center justify-center bg-light-background-primary dark:bg-dark-background-primary rounded-t-2xl p-8">
+        <ActivityIndicator size="large" color={palette.brand.primary} />
+      </View>
+    );
+  }
 
   return (
     <KeyboardAvoidingView
@@ -56,7 +153,15 @@ const Details = () => {
             name="type"
             control={control}
             render={({ field: { value, onChange } }) => (
-              <MultiOptionsButton options={["Entrada", "Saida", "Outros"]} selected={value} onChange={onChange} />
+              <MultiOptionsButton
+                options={[
+                  { label: "Entrada", value: "income" },
+                  { label: "Saída", value: "expense" },
+                  { label: "Outros", value: "other" },
+                ]}
+                selected={value}
+                onChange={onChange}
+              />
             )}
           />
         </View>
@@ -69,7 +174,14 @@ const Details = () => {
             name="status"
             control={control}
             render={({ field: { value, onChange } }) => (
-              <MultiOptionsButton options={["Pendente", "Finalizado"]} selected={value} onChange={onChange} />
+              <MultiOptionsButton
+                options={[
+                  { label: "Pendente", value: "pending" },
+                  { label: "Finalizado", value: "completed" },
+                ]}
+                selected={value}
+                onChange={onChange}
+              />
             )}
           />
         </View>
@@ -94,22 +206,21 @@ const Details = () => {
         />
 
         <CustomInput
-          name="dueDate"
+          name="due_date"
           label="Data"
           control={control}
           type="date"
           placeholder="Informe a data"
           leftIcon={<CalendarDays size={18} color={iconColor} />}
-          error={errors.dueDate?.message}
+          error={errors.due_date?.message}
         />
         <CustomInput
           name="value"
-          label="Valor da Transação"
           control={control}
+          label="Valor da Transação"
           type="currency"
           placeholder="Digite o valor"
           leftIcon={<DollarSign size={18} color={iconColor} />}
-          error={errors.value?.message}
         />
         <CustomInput
           name="code"
@@ -123,9 +234,22 @@ const Details = () => {
       </ScrollView>
 
       <View className="flex-1 flex-row max-h-20 border-t border-neutral-300 dark:border-neutral-800">
-        <Button title="Cancelar" variant="ghost" textVariant="danger" className="flex-1" onPress={() => {}} />
+        <Button
+          title="Cancelar"
+          variant="ghost"
+          textVariant="danger"
+          className="flex-1"
+          onPress={() => router.back()}
+          disabled={isLoading}
+        />
         <View className="w-[1.5px] bg-neutral-300 dark:bg-neutral-800" />
-        <Button title="Cadastrar" variant="ghost" className="flex-1" onPress={() => {}} />
+        <Button
+          title="Cadastrar"
+          variant="ghost"
+          className="flex-1"
+          onPress={handleSubmit(onSubmit)}
+          disabled={isLoading}
+        />
       </View>
     </KeyboardAvoidingView>
   );

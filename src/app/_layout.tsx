@@ -23,8 +23,10 @@ import {
   Quicksand_700Bold,
   useFonts,
 } from "@expo-google-fonts/quicksand";
+import { AuthProvider, useAuth } from "@/contexts/auth-provaider";
+import { useCustomNavigation } from "@/hooks/useCustomNavigation";
 
-export default function MainLayout() {
+export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({
     Quicksand_400Regular,
     Quicksand_500Medium,
@@ -53,19 +55,20 @@ export default function MainLayout() {
     <SafeAreaProvider>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <StatusBar style="light" />
-
-        <LanguageProvider>
-          <ThemeProvider>
-            <ToastProvider>
-              <BottomSheetModalProvider>
-                <Stack screenOptions={{ headerShown: false }}>
-                  <Stack.Screen name="(auth)" />
-                  <Stack.Screen name="(app)" />
-                </Stack>
-              </BottomSheetModalProvider>
-            </ToastProvider>
-          </ThemeProvider>
-        </LanguageProvider>
+        <ToastProvider>
+          <LanguageProvider>
+            <ThemeProvider>
+              <AuthProvider>
+                <BottomSheetModalProvider>
+                  <Stack screenOptions={{ headerShown: false }}>
+                    <Stack.Screen name="(auth)" />
+                    <Stack.Screen name="(app)" />
+                  </Stack>
+                </BottomSheetModalProvider>
+              </AuthProvider>
+            </ThemeProvider>
+          </LanguageProvider>
+        </ToastProvider>
       </GestureHandlerRootView>
     </SafeAreaProvider>
   );

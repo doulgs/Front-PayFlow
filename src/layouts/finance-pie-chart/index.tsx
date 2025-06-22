@@ -1,18 +1,22 @@
-import React, { useState } from "react";
-import { ActivityIndicator, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, LayoutAnimation, Platform, TouchableOpacity, UIManager, View } from "react-native";
 
 import { Card } from "@/components/ui/cards";
+import { TransactionSummaryDTO } from "@/dtos/transaction";
 import { useChangeLanguage } from "@/hooks/useChangeLanguage";
 import { useTheme } from "@/hooks/useTheme";
-import { LatestTransactionProps } from "@/types/finance";
 import { ChartPie } from "lucide-react-native";
 import { PieChart } from "react-native-gifted-charts";
 
 import ImageNoData from "@/assets/images/pie-chart-amico.svg";
 
+if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
+
 interface Props {
-  data: LatestTransactionProps[];
   isLoading?: boolean;
+  data: TransactionSummaryDTO | null;
 }
 
 const FinancePieChart: React.FC<Props> = ({ data, isLoading = false }) => {
@@ -20,13 +24,47 @@ const FinancePieChart: React.FC<Props> = ({ data, isLoading = false }) => {
   const { currentTheme, iconColor, palette } = useTheme();
   const [focusedKey, setFocusedKey] = useState<string>("");
 
-  const total = data.reduce((acc, cur) => acc + cur.value, 0);
-  const hasNoData = data.length === 0 || data.every((item) => item.value === 0);
-  const focusedItem = data.find((item) => item.key === focusedKey);
+  useEffect(() => {
+    if (!isLoading) {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    }
+  }, [isLoading]);
+
+  const total = data ? Object.values(data).reduce((acc, cur) => (typeof cur === "number" ? acc + cur : acc), 0) : 0;
+
+  const chartItems = [
+    {
+      key: "total_income",
+      label: t("chart.finance.income"),
+      value: data?.total_income ?? 0,
+      color: "#22C55E",
+    },
+    {
+      key: "total_expense",
+      label: t("chart.finance.expense"),
+      value: data?.total_expense ?? 0,
+      color: "#EF4444",
+    },
+    {
+      key: "total_to_receive",
+      label: t("chart.finance.to_receive"),
+      value: data?.total_to_receive ?? 0,
+      color: "#3B82F6",
+    },
+    {
+      key: "total_to_pay",
+      label: t("chart.finance.to_pay"),
+      value: data?.total_to_pay ?? 0,
+      color: "#FACC15",
+    },
+  ];
+
+  const hasNoData = chartItems.every((item) => item.value === 0);
+  const focusedItem = chartItems.find((item) => item.key === focusedKey);
   const focusedPercentage = ((focusedItem?.value ?? 0) / total) * 100;
   const bgColor = currentTheme === "dark" ? palette.background.primary : palette.background.primary;
 
-  const pieData = data.map((item) => ({
+  const pieData = chartItems.map((item) => ({
     value: item.value,
     color: item.color,
     focused: item.key === focusedKey,
@@ -63,8 +101,10 @@ const FinancePieChart: React.FC<Props> = ({ data, isLoading = false }) => {
               data={pieData}
               donut
               sectionAutoFocus
-              radius={90}
-              innerRadius={60}
+              isAnimated
+              animationDuration={500}
+              radius={70}
+              innerRadius={40}
               innerCircleColor={bgColor}
               centerLabelComponent={() =>
                 focusedItem ? (
@@ -78,7 +118,7 @@ const FinancePieChart: React.FC<Props> = ({ data, isLoading = false }) => {
           </Card.Body>
 
           <Card.Footer className="flex-row flex-wrap justify-center px-2 py-1 gap-y-2">
-            {data.map((item) => (
+            {chartItems.map((item) => (
               <TouchableOpacity
                 key={item.key}
                 onPress={() => setFocusedKey((prev) => (prev === item.key ? "" : item.key))}

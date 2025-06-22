@@ -1,27 +1,19 @@
+import { TransactionDTO } from "@/dtos/transaction";
 import { create } from "zustand";
-import { FinanceTransaction } from "@/types/finance";
 
-interface FinanceTransactionStore {
-  data: FinanceTransaction[];
-  setData: (data: FinanceTransaction[]) => void;
-  add: (transaction: FinanceTransaction) => void;
-  remove: (id: string) => void;
+interface TransactionStore {
+  data: Partial<TransactionDTO>;
+  setData: (data: Partial<TransactionDTO>) => void;
+  mergeData: (data: Partial<TransactionDTO>) => void;
   reset: () => void;
 }
 
-export const useFinanceTransactionStore = create<FinanceTransactionStore>((set) => ({
-  data: [],
+export const useTransactionStore = create<TransactionStore>((set) => ({
+  data: {},
   setData: (data) => set({ data }),
-  add: (transaction) =>
+  mergeData: (newData) =>
     set((state) => ({
-      data: [transaction, ...state.data],
+      data: { ...state.data, ...newData },
     })),
-  remove: (id) =>
-    set((state) => ({
-      data: state.data.filter((t) => t.id !== id),
-    })),
-  reset: () =>
-    set({
-      data: [],
-    }),
+  reset: () => set({ data: {} }),
 }));
