@@ -1,20 +1,30 @@
 import React from "react";
-import { KeyboardAvoidingView, Platform, ScrollView, Text, View } from "react-native";
+import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, Text, View } from "react-native";
 
 import { Button } from "@/components/ui/buttons";
 import { CustomInput } from "@/components/ui/inputs";
 import { MultiOptionsButton } from "@/components/ui/multi-options-button";
+import { useToast } from "@/contexts/toast-context";
+import { TransactionInputDTO } from "@/dtos/transaction";
 import { useCurrency } from "@/hooks/useCurrency";
+import { useCustomNavigation } from "@/hooks/useCustomNavigation";
 import { useTheme } from "@/hooks/useTheme";
+import { transactionService } from "@/services/transactions-service";
+import { useTransactionStore } from "@/storages/useFinanceTransactionStore";
+import { useUserStore } from "@/storages/useUserStore";
 import { AlignLeft, CalendarDays, DollarSign, FileDigit, LetterText } from "lucide-react-native";
 import { Controller, useForm } from "react-hook-form";
-import { TransactionInputDTO } from "@/dtos/transaction";
-import { useTransactionStore } from "@/storages/useFinanceTransactionStore";
 
 const Details = () => {
+  const { palette } = useTheme();
+  const { showToast } = useToast();
   const { iconColor } = useTheme();
+  const { userId } = useUserStore();
+  const { data } = useTransactionStore();
   const { formatCurrency } = useCurrency();
-  const { data, mergeData } = useTransactionStore();
+  const { router } = useCustomNavigation();
+
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const {
     control,
@@ -41,18 +51,67 @@ const Details = () => {
     }
   }, [data.value]);
 
-  const onSubmit = (formData: TransactionInputDTO) => {
+  const onSubmit = async (formData: TransactionInputDTO) => {
     const numericValue = Number(
       String(formData.value)
         .replace(/[^0-9,-]+/g, "")
         .replace(",", ".")
     );
 
-    mergeData({
-      ...formData,
-      value: numericValue,
-    });
+    if (!userId) {
+      console.error("Usuário não encontrado!");
+      return;
+    }
+
+    if (!data.type) {
+      console.error("Tipo da transação não definido!");
+      return;
+    }
+
+    if (isNaN(numericValue)) {
+      console.error("Valor inválido:", formData.value);
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+
+      await transactionService.newTransaction(
+        {
+          ...formData,
+          value: numericValue as unknown as string,
+          type: data.type,
+        },
+        userId
+      );
+
+      reset();
+      showToast({
+        type: "success",
+        text: "Transação criada",
+        description: "A transação foi criada com sucesso.",
+        position: "bottom",
+      });
+      router.replace("/(app)/(tabs)/(dashboard)");
+    } catch (error) {
+      showToast({
+        type: "warning",
+        text: "Erro ao criar transação",
+        description: `Ocorreu um erro ao criar a transação. ${error}`,
+        position: "bottom",
+      });
+      console.error("Error creating transaction:", error);
+      setIsLoading(false);
+    }
   };
+
+  if (isLoading) {
+    return (
+      <View className="flex-1 items-center justify-center bg-light-background-primary dark:bg-dark-background-primary rounded-t-2xl p-8">
+        <ActivityIndicator size="large" color={palette.brand.primary} />
+      </View>
+    );
+  }
 
   return (
     <KeyboardAvoidingView
@@ -149,9 +208,22 @@ const Details = () => {
       </ScrollView>
 
       <View className="flex-1 flex-row max-h-20 border-t border-neutral-300 dark:border-neutral-800">
-        <Button title="Cancelar" variant="ghost" textVariant="danger" className="flex-1" onPress={() => {}} />
+        <Button
+          title="Cancelar"
+          variant="ghost"
+          textVariant="danger"
+          className="flex-1"
+          onPress={() => router.back()}
+          disabled={isLoading}
+        />
         <View className="w-[1.5px] bg-neutral-300 dark:bg-neutral-800" />
-        <Button title="Cadastrar" variant="ghost" className="flex-1" onPress={handleSubmit(onSubmit)} />
+        <Button
+          title="Cadastrar"
+          variant="ghost"
+          className="flex-1"
+          onPress={handleSubmit(onSubmit)}
+          disabled={isLoading}
+        />
       </View>
     </KeyboardAvoidingView>
   );
