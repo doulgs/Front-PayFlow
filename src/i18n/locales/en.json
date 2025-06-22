@@ -34,7 +34,7 @@
   "finance.transaction.label.month": "Show more",
   "finance.transaction.label.available": "Available Balance",
   "finance.transaction.label.income": "Incomes",
-  "finance.transaction.label.outcome": "Outcomes",
+  "finance.transaction.label.expense": "Expenses",
   "finance.transaction.label.to-receive": "Receivables",
   "finance.transaction.label.to-pay": "Payables",
   "finance.latest.title": "Latest transactions",
@@ -68,5 +68,9 @@
   "languageToggle.pt": "Portuguese",
   "languageToggle.en": "English",
   "terms.accept": "I have read and accept the",
-  "terms.link": "Terms of Use"
+  "terms.link": "Terms of Use",
+  "chart.finance.income": "Income",
+  "chart.finance.expense": "Expenses",
+  "chart.finance.to_receive": "To Receive",
+  "chart.finance.to_pay": "To Pay"
 }

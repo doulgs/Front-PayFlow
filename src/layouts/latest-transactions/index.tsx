@@ -4,7 +4,7 @@ import { useChangeLanguage } from "@/hooks/useChangeLanguage";
 import { useCurrency } from "@/hooks/useCurrency";
 import { useTheme } from "@/hooks/useTheme";
 import { useVisibilityStore } from "@/storages/useVisibilityStore";
-import { FinanceTransaction } from "@/types/finance";
+
 import { clsx } from "clsx";
 import { LayoutList, Trash2 } from "lucide-react-native";
 import React, { useEffect, useRef, useState } from "react";
@@ -12,12 +12,13 @@ import { ActivityIndicator, TouchableOpacity, View } from "react-native";
 
 import ImageNoData from "@/assets/images/research-paper-amico.svg";
 import { Button } from "@/components/ui/buttons";
+import { TransactionDTO } from "@/dtos/transaction";
 
 const RECORD_DISPLAY_LIMIT = 7;
 
 type LatestTransactionsProps = {
-  data: FinanceTransaction[];
   isLoading?: boolean;
+  data: TransactionDTO[];
 };
 
 const LatestTransactions: React.FC<LatestTransactionsProps> = ({ data, isLoading = false }) => {
@@ -27,11 +28,11 @@ const LatestTransactions: React.FC<LatestTransactionsProps> = ({ data, isLoading
   const { isVisible } = useVisibilityStore();
 
   const bottomSheetRef = useRef<BottomSheetRef>(null);
-  const [selectedTransaction, setSelectedTransaction] = useState<FinanceTransaction | null>(null);
+  const [selectedTransaction, setSelectedTransaction] = useState<TransactionDTO | null>(null);
 
   const { BottomSheet, open } = useBottomSheet(bottomSheetRef);
 
-  const handleOpenDetails = (item: FinanceTransaction) => {
+  const handleOpenDetails = (item: TransactionDTO) => {
     setSelectedTransaction({ ...item });
   };
 
@@ -69,17 +70,25 @@ const LatestTransactions: React.FC<LatestTransactionsProps> = ({ data, isLoading
               <Card.Map
                 variant="ghost"
                 className="px-1"
-                items={data.slice(0, RECORD_DISPLAY_LIMIT)}
+                items={[...data]
+                  .sort((a, b) => new Date(b.due_date).getTime() - new Date(a.due_date).getTime())
+                  .slice(0, RECORD_DISPLAY_LIMIT)}
                 renderItem={(item) => (
                   <TouchableOpacity key={item.id} onPress={() => handleOpenDetails(item)}>
                     <Card.Body className="flex-row items-center justify-between gap-2">
-                      <Card.Icon variant="outlined">
+                      <Card.Icon variant="outlined" className="min-w-9 min-h-9">
                         <Card.Text>
-                          {item.title
-                            .split(" ")
-                            .slice(0, 2)
-                            .map((word) => word.charAt(0).toUpperCase())
-                            .join("")}
+                          {(() => {
+                            const words = item.title.trim().split(" ");
+                            if (words.length === 1) {
+                              const word = words[0];
+                              return `${word.charAt(0).toUpperCase()}${word.charAt(word.length - 1).toUpperCase()}`;
+                            }
+                            return words
+                              .slice(0, 2)
+                              .map((word) => word.charAt(0).toUpperCase())
+                              .join("");
+                          })()}
                         </Card.Text>
                       </Card.Icon>
 
@@ -88,7 +97,7 @@ const LatestTransactions: React.FC<LatestTransactionsProps> = ({ data, isLoading
                           numberOfLines={1}
                           className={clsx(
                             "text-md font-bold",
-                            item.status === "paid" && "text-zinc-300 dark:text-zinc-600 line-through"
+                            item.status === "completed" && "text-zinc-300 dark:text-zinc-600 line-through"
                           )}
                         >
                           {item.title}
@@ -97,7 +106,7 @@ const LatestTransactions: React.FC<LatestTransactionsProps> = ({ data, isLoading
                           numberOfLines={1}
                           className={clsx(
                             "text-sm",
-                            item.status === "paid" && "text-zinc-300 dark:text-zinc-600 line-through"
+                            item.status === "completed" && "text-zinc-300 dark:text-zinc-600 line-through"
                           )}
                         >
                           {item.description}
@@ -109,7 +118,7 @@ const LatestTransactions: React.FC<LatestTransactionsProps> = ({ data, isLoading
                           numberOfLines={1}
                           className={clsx(
                             "text-lg font-bold",
-                            item.status === "paid" && "text-zinc-300 dark:text-zinc-600 line-through"
+                            item.status === "completed" && "text-zinc-300 dark:text-zinc-600 line-through"
                           )}
                         >
                           {isVisible ? "*******" : formatCurrency(item.value)}

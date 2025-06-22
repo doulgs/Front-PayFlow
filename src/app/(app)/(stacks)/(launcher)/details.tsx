@@ -13,6 +13,7 @@ import { transactionService } from "@/services/transactions-service";
 import { useTransactionStore } from "@/storages/useFinanceTransactionStore";
 import { useUserStore } from "@/storages/useUserStore";
 import { AlignLeft, CalendarDays, DollarSign, FileDigit, LetterText } from "lucide-react-native";
+import { DateTime } from "luxon";
 import { Controller, useForm } from "react-hook-form";
 
 const Details = () => {
@@ -76,14 +77,39 @@ const Details = () => {
     try {
       setIsLoading(true);
 
-      await transactionService.newTransaction(
+      const now = DateTime.now().setZone("America/Sao_Paulo");
+
+      const dateWithCurrentTime = DateTime.fromISO(formData.due_date, {
+        zone: "America/Sao_Paulo",
+      })
+        .set({
+          hour: now.hour,
+          minute: now.minute,
+          second: now.second,
+          millisecond: now.millisecond,
+        })
+        .toISO();
+
+      const result = await transactionService.newTransaction(
         {
           ...formData,
           value: numericValue as unknown as string,
           type: data.type,
+          due_date: dateWithCurrentTime || "",
         },
         userId
       );
+
+      if (!result.isValid) {
+        showToast({
+          type: "warning",
+          text: "Erro ao criar transação",
+          description: `Erro. ${result.msg}`,
+          position: "bottom",
+        });
+        setIsLoading(false);
+        return;
+      }
 
       reset();
       showToast({
@@ -130,7 +156,7 @@ const Details = () => {
               <MultiOptionsButton
                 options={[
                   { label: "Entrada", value: "income" },
-                  { label: "Saída", value: "outcome" },
+                  { label: "Saída", value: "expense" },
                   { label: "Outros", value: "other" },
                 ]}
                 selected={value}

@@ -64,7 +64,7 @@ export default function Index() {
             <MultiOptionsButton
               options={[
                 { label: "Entrada", value: "income" },
-                { label: "Saída", value: "outcome" },
+                { label: "Saída", value: "expense" },
               ]}
               selected={value}
               onChange={onChange}

@@ -34,7 +34,7 @@
   "finance.transaction.label.month": "Exibir mais",
   "finance.transaction.label.available": "Saldo Disponível",
   "finance.transaction.label.income": "Entradas",
-  "finance.transaction.label.outcome": "Saídas",
+  "finance.transaction.label.expense": "Saídas",
   "finance.transaction.label.to-receive": "A Receber",
   "finance.transaction.label.to-pay": "A Pagar",
   "finance.latest.title": "Últimos lançamentos",
@@ -68,5 +68,9 @@
   "languageToggle.pt": "Português",
   "languageToggle.en": "Inglês",
   "terms.accept": "Eu li e aceito os",
-  "terms.link": "Termos de Uso"
+  "terms.link": "Termos de Uso",
+  "chart.finance.income": "Entradas",
+  "chart.finance.expense": "Saídas",
+  "chart.finance.to_receive": "A Receber",
+  "chart.finance.to_pay": "A Pagar"
 }
