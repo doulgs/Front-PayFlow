@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, TextProps, GestureResponderEvent, TouchableOpacity, FlatList, FlatListProps } from "react-native";
 import { clsx } from "clsx";
+import { Badge } from "../badge";
 
 type Variant = "default" | "outlined" | "ghost" | "success" | "danger" | "warning" | "info" | "muted";
 
@@ -8,6 +9,8 @@ interface CardRootProps {
   children: React.ReactNode;
   className?: string;
   variant?: Variant;
+  topBadge?: string;
+  topBadgeVariant?: "default" | "success" | "warning" | "info" | "error" | undefined;
   onPress?: (event: GestureResponderEvent) => void;
 }
 
@@ -63,10 +66,17 @@ const textVariantClasses: Record<Variant, string> = {
   muted: "text-zinc-800 dark:text-zinc-100",
 };
 
-const CardRoot: React.FC<CardRootProps> = ({ children, className, variant = "default", onPress }) => {
+const CardRoot: React.FC<CardRootProps> = ({
+  children,
+  className,
+  variant = "default",
+  onPress,
+  topBadge,
+  topBadgeVariant = "default",
+}) => {
   const Wrapper = onPress ? TouchableOpacity : View;
   const classNames = clsx(
-    "flex-1 rounded-xl overflow-hidden p-4",
+    "rounded-xl overflow-hidden p-4",
     bgVariantClasses[variant],
     textVariantClasses[variant],
     className
@@ -74,6 +84,11 @@ const CardRoot: React.FC<CardRootProps> = ({ children, className, variant = "def
 
   return (
     <Wrapper className={classNames} onPress={onPress}>
+      {topBadge && (
+        <Badge className="absolute top-0 left-0 py-0 px-4 rounded-none rounded-br-md" variant={topBadgeVariant}>
+          <Text>{topBadge}</Text>
+        </Badge>
+      )}
       {children}
     </Wrapper>
   );
