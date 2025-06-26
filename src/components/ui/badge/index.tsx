@@ -20,7 +20,7 @@ const variantStyles: Record<string, string> = {
 export function Badge({ variant = "default", icon: Icon, children, className, ...props }: BadgeProps) {
   return (
     <View
-      className={clsx("flex-row items-center gap-1 rounded-full px-3 py-1", variantStyles[variant], className)}
+      className={clsx("flex-row items-center gap-1 rounded-md px-2 py-1", variantStyles[variant], className)}
       {...props}
     >
       {Icon && <Icon size={14} className="mr-1" />}
