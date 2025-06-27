@@ -17,19 +17,19 @@ export interface ShowToastProps {
 
 export const TOAST_STYLES = {
   success: {
-    bg: "bg-light-status-success dark:bg-dark-status-success",
+    bg: "bg-status-success dark:bg-status-success",
     icon: "check-circle",
   },
   danger: {
-    bg: "bg-light-status-danger dark:bg-dark-status-danger",
+    bg: "bg-status-danger dark:bg-status-danger",
     icon: "exclamation-circle",
   },
   info: {
-    bg: "bg-light-status-info dark:bg-dark-status-info",
+    bg: "bg-status-info dark:bg-status-info",
     icon: "info-circle",
   },
   warning: {
-    bg: "bg-light-status-warning dark:bg-dark-status-warning",
+    bg: "bg-status-warning dark:bg-status-warning",
     icon: "exclamation-triangle",
   },
 };
@@ -83,28 +83,20 @@ const ToastMessage = forwardRef<ToastHandle>((_, ref) => {
       }
 
       <View className="ml-4 flex-1">
-        <Text className="text-light-typography-inverse dark:text-dark-typography-inverse font-bold text-lg">
-          {String(toastData.text ?? "")}
-        </Text>
+        <Text className="text-white font-bold text-lg">{String(toastData.text ?? "")}</Text>
 
-        {!!toastData.description && (
-          <Text className="text-light-typography-inverse dark:text-dark-typography-inverse text-sm mt-1">
-            {String(toastData.description)}
-          </Text>
-        )}
+        {!!toastData.description && <Text className="text-white text-sm mt-1">{String(toastData.description)}</Text>}
       </View>
 
       {!!toastData.buttonText && (
         <TouchableOpacity
-          className="ml-4 bg-light-surface-elevated dark:bg-dark-surface-elevated px-4 py-2 rounded-lg"
+          className="ml-4 bg-brand-primary dark:bg-dark-brand-primary px-4 py-2 rounded-lg"
           onPress={() => {
             toastData.buttonAction?.();
             closeToast();
           }}
         >
-          <Text className="text-light-typography-primary dark:text-dark-typography-primary font-semibold">
-            {String(toastData.buttonText)}
-          </Text>
+          <Text className="text-white font-semibold">{String(toastData.buttonText)}</Text>
         </TouchableOpacity>
       )}
 

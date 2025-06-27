@@ -3,9 +3,7 @@ import { Image, Pressable, StatusBar, Text, TouchableOpacity, View, ViewStyle } 
 
 import { GradientLinear } from "@/components/ui/overlays/gradient-linear";
 import { useChangeLanguage } from "@/hooks/useChangeLanguage";
-import { useCustomNavigation } from "@/hooks/useCustomNavigation";
 import { useGreeting } from "@/hooks/useGreeting";
-import { useTheme } from "@/hooks/useTheme";
 import { clsx } from "clsx";
 import { ChevronLeft } from "lucide-react-native";
 
@@ -55,10 +53,8 @@ export const Header: React.FC<HeaderProps> = ({
   transparentBackground = false,
   gradientBackground = true,
 }) => {
-  const { iconColor } = useTheme();
   const { t } = useChangeLanguage();
   const { greeting } = useGreeting();
-  const { to } = useCustomNavigation();
   const title = options.title || route.name;
 
   const canGoBack = !hideBackButton && navigation?.canGoBack?.();
@@ -81,7 +77,7 @@ export const Header: React.FC<HeaderProps> = ({
         )}
 
         {showImageAvatar && imageAvatar && (
-          <Pressable onPress={() => to.app.stacks.profile.home()}>
+          <Pressable>
             <Image source={{ uri: imageAvatar }} className="w-10 h-10 border border-stone-800 rounded-lg" />
           </Pressable>
         )}

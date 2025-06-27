@@ -56,7 +56,7 @@ export const MonthSelectorCard = forwardRef<MonthSelectorRef, Props>(
     const nextMonth = currentDate.add(1, "month");
 
     return (
-      <Card variant="outlined" className="flex-row items-center justify-between px-4 py-3 rounded-lg min-h-16">
+      <Card variant="outline" className="flex-row items-center justify-between px-4 py-3 rounded-lg min-h-16">
         <View className="flex-row items-center justify-center space-x-2 flex-1">
           <TouchableOpacity onPress={() => handleChangeMonth(-1)} className="px-4">
             <ChevronLeft size={22} color={iconColor} />
