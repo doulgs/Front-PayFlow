@@ -16,7 +16,7 @@ export function GradientLinear({ className, style, children }: Props) {
 
   const gradientColors: [string, string] =
     currentTheme === "dark"
-      ? [palette.brand.primary, palette.brand.primary]
+      ? [palette.brand["dark-primary"], palette.brand["dark-secondary"]]
       : [palette.brand.primary, palette.brand.primary];
 
   return (
