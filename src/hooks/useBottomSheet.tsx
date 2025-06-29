@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { BottomSheetBackdrop, BottomSheetBackdropProps, BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
 import { X } from "lucide-react-native";
 import { useTheme } from "@/hooks/useTheme";
+import { Text } from "react-native";
 
 interface BottomSheetProps {
   hideHeader?: boolean;
@@ -48,12 +49,12 @@ export const useBottomSheet = (externalRef?: RefObject<BottomSheetRef | null>): 
           <>{render}</>
         ) : (
           <Card>
-            <Card.Header className="items-center justify-between">
-              <Card.Text className="text-2xl">{title}</Card.Text>
-              <Card.Icon onPress={close}>
+            <Card className="items-center justify-between">
+              <Text className="text-2xl">{title}</Text>
+              <Card onPress={close}>
                 <X size={20} color={iconColor} />
-              </Card.Icon>
-            </Card.Header>
+              </Card>
+            </Card>
             {render}
           </Card>
         )}

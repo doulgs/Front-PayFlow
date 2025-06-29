@@ -4,7 +4,7 @@ import { Control, useController } from "react-hook-form";
 import { Card } from "@/components/ui/card";
 import { useTheme } from "@/hooks/useTheme";
 import { Trash2 } from "lucide-react-native";
-import { View } from "react-native";
+import { Text, View } from "react-native";
 
 interface KeyboardProps {
   control: Control<any>;
@@ -49,9 +49,9 @@ export function NumericKeyboard({ control, name }: KeyboardProps) {
               {k === "backspace" ? (
                 <Trash2 size={24} color={palette.status.danger} />
               ) : (
-                <Card.Text className="text-xl font-bold text-light-typography-primary dark:text-dark-typography-primary">
+                <Text className="text-xl font-bold text-light-typography-primary dark:text-dark-typography-primary">
                   {k}
-                </Card.Text>
+                </Text>
               )}
             </Card>
           ))}
