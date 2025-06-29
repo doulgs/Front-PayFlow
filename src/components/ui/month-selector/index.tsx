@@ -5,7 +5,7 @@ import { useDate } from "@/hooks/useDate";
 import { useTheme } from "@/hooks/useTheme";
 import dayjs from "dayjs";
 import { ChevronLeft, ChevronRight } from "lucide-react-native";
-import { Card } from "../cards";
+import { Card } from "../card";
 import { useChangeLanguage } from "@/hooks/useChangeLanguage";
 
 interface Props {
@@ -66,8 +66,8 @@ export const MonthSelectorCard = forwardRef<MonthSelectorRef, Props>(
             {formatDateTime(prevMonth.toDate(), "monthYear")}
           </Text>
 
-          <View className="px-4 py-1 rounded-lg min-w-[90px] items-center bg-light-brand-primary/10 dark:bg-dark-brand-primary/10">
-            <Text className="text-base font-semibold text-light-brand-primary dark:text-dark-brand-primary">
+          <View className="px-4 py-1 rounded-lg min-w-[90px] items-center bg-light-highlight-primary/10 dark:bg-dark-highlight-primary/10">
+            <Text className="text-base font-semibold text-light-highlight-primary dark:text-dark-highlight-primary">
               {formatDateTime(currentDate.toDate(), "monthYear")}
             </Text>
           </View>

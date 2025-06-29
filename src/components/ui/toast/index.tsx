@@ -90,7 +90,7 @@ const ToastMessage = forwardRef<ToastHandle>((_, ref) => {
 
       {!!toastData.buttonText && (
         <TouchableOpacity
-          className="ml-4 bg-brand-primary dark:bg-dark-brand-primary px-4 py-2 rounded-lg"
+          className="ml-4 bg-highlight-primary dark:bg-dark-highlight-primary px-4 py-2 rounded-lg"
           onPress={() => {
             toastData.buttonAction?.();
             closeToast();

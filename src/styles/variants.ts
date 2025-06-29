@@ -3,9 +3,9 @@ export type Size = "xs" | "sm" | "base" | "md" | "lg" | "xl";
 
 export const variants: Record<Variant, string> = {
   default: "bg-background-alternative dark:bg-background-dark-alternative rounded-lg overflow-hidden shadow",
-  primary: "bg-brand-primary dark:bg-brand-dark-primary rounded-lg overflow-hidden shadow",
-  secondary: "bg-brand-secondary dark:bg-brand-dark-secondary rounded-lg overflow-hidden shadow",
-  outline: "border border-brand-primary/20 dark:border-brand-dark-primary/20 bg-transparent rounded-lg overflow-hidden",
+  primary: "bg-highlight-primary dark:bg-highlight-dark-primary rounded-lg overflow-hidden shadow",
+  secondary: "bg-highlight-secondary dark:bg-highlight-dark-secondary rounded-lg overflow-hidden shadow",
+  outline: "border border-gray-300 bg-transparent rounded-lg overflow-hidden",
   ghost: "bg-transparent rounded-lg overflow-hidden",
   link: "",
   icon: "",
@@ -16,10 +16,10 @@ export const variantText: Record<Variant, string> = {
   default: "text-white dark:text-black",
   primary: "text-white dark:text-black",
   secondary: "text-white dark:text-black font-bold",
-  outline: "text-brand-primary dark:text-brand-dark-primary",
-  ghost: "text-brand-primary dark:text-brand-dark-primary",
-  link: "text-brand-primary underline dark:text-brand-dark-primary",
-  icon: "text-brand-primary dark:text-brand-dark-primary",
+  outline: "text-highlight-primary dark:text-highlight-dark-primary",
+  ghost: "text-highlight-primary dark:text-highlight-dark-primary",
+  link: "text-highlight-primary underline dark:text-highlight-dark-primary",
+  icon: "text-highlight-primary dark:text-highlight-dark-primary",
   loading: "text-white dark:text-black",
 };
 

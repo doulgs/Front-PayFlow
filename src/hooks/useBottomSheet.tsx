@@ -1,6 +1,6 @@
 import React, { RefObject, useCallback } from "react";
 
-import { Card } from "@/components/ui/cards";
+import { Card } from "@/components/ui/card";
 import { BottomSheetBackdrop, BottomSheetBackdropProps, BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
 import { X } from "lucide-react-native";
 import { useTheme } from "@/hooks/useTheme";

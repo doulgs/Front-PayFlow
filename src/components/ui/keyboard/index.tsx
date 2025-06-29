@@ -1,7 +1,7 @@
 import React from "react";
 import { Control, useController } from "react-hook-form";
 
-import { Card } from "@/components/ui/cards";
+import { Card } from "@/components/ui/card";
 import { useTheme } from "@/hooks/useTheme";
 import { Trash2 } from "lucide-react-native";
 import { View } from "react-native";

@@ -1,7 +1,7 @@
 import React from "react";
 import { Image, Pressable, StatusBar, Text, TouchableOpacity, View, ViewStyle } from "react-native";
 
-import { GradientLinear } from "@/components/ui/overlays/gradient-linear";
+import { GradientLinear } from "@/components/ui/overlay/gradient-linear";
 import { useChangeLanguage } from "@/hooks/useChangeLanguage";
 import { useGreeting } from "@/hooks/useGreeting";
 import { clsx } from "clsx";
@@ -115,7 +115,7 @@ export const Header: React.FC<HeaderProps> = ({
   }
 
   return (
-    <View className="bg-light-brand-primary" style={containerStyle}>
+    <View className="bg-light-highlight-primary" style={containerStyle}>
       {content}
     </View>
   );
