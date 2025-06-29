@@ -4,6 +4,8 @@ import { Stack } from "expo-router";
 export default function MainLayout() {
   return (
     <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="(account)" />
+      <Stack.Screen name="(category)" />
       <Stack.Screen name="(dashboard)" />
       <Stack.Screen name="(extract)" />
       <Stack.Screen name="(laucher)" />

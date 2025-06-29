@@ -13,9 +13,9 @@ export const variants: Record<Variant, string> = {
 };
 
 export const variantText: Record<Variant, string> = {
-  default: "text-white dark:text-black",
+  default: "text-white",
   primary: "text-white dark:text-black",
-  secondary: "text-white dark:text-black font-bold",
+  secondary: "text-black",
   outline: "text-highlight-primary dark:text-highlight-dark-primary",
   ghost: "text-highlight-primary dark:text-highlight-dark-primary",
   link: "text-highlight-primary underline dark:text-highlight-dark-primary",

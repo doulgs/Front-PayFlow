@@ -65,7 +65,7 @@ export const Header: React.FC<HeaderProps> = ({
     paddingTop: STATUS_BAR_HEIGHT,
   };
 
-  const textColorClass = "text-light-typography-inverse";
+  const textColorClass = "text-white";
 
   const content = (
     <View className="flex-1 flex-row pr-2 pl-4 items-center justify-between">

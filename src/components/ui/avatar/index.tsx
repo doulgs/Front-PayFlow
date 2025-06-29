@@ -6,11 +6,21 @@ type AvatarProps = {
   imageUrl?: string;
   imageLocal?: ImageSourcePropType;
   fallback?: string;
+  icon?: React.ReactNode;
   size?: number;
   className?: string;
+  showBorder?: boolean;
 };
 
-export const Avatar: React.FC<AvatarProps> = ({ imageUrl, imageLocal, fallback, size = 48, className }) => {
+export const Avatar: React.FC<AvatarProps> = ({
+  imageUrl,
+  imageLocal,
+  fallback,
+  icon,
+  size = 48,
+  className,
+  showBorder,
+}) => {
   if (imageUrl === "not found") imageUrl = "";
 
   const initials = fallback
@@ -29,14 +39,14 @@ export const Avatar: React.FC<AvatarProps> = ({ imageUrl, imageLocal, fallback, 
     height: size,
   };
 
-  const showBorder = !imageSource;
+  const border = showBorder ?? !imageSource;
 
   return (
     <View
       className={clsx(
         "items-center justify-center rounded-xl overflow-hidden",
         "bg-highlight-dark-primary/40",
-        showBorder && "border border-highlight-dark-primary",
+        border && "border border-highlight-dark-primary",
         className
       )}
       style={containerStyle}
@@ -51,6 +61,8 @@ export const Avatar: React.FC<AvatarProps> = ({ imageUrl, imageLocal, fallback, 
             borderRadius: 0,
           }}
         />
+      ) : icon ? (
+        icon
       ) : (
         <Text className="text-white font-bold" style={{ fontSize: size / 3 }}>
           {initials}
